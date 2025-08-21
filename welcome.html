@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Clothing Brand</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/WhatsApp Image 2025-08-21 at 00.21.37.jpeg" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    .fade-in { animation: fadeIn 1s ease-in forwards; opacity: 0; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Background floating abstract shapes */
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      filter: blur(12px);
+      animation: float 10s infinite ease-in-out alternate;
+    }
+    @keyframes float {
+      from { transform: translateY(0px) rotate(0deg); }
+      to { transform: translateY(-20px) rotate(45deg); }
+    }
+  </style>
+</head>
+<body class="bg-black text-white flex items-center justify-center min-h-screen p-4 relative overflow-hidden">
+
+  <!-- Background Abstract Shapes -->
+  <div class="shape w-16 h-16 top-10 left-20"></div>
+  <div class="shape w-24 h-24 top-40 right-16"></div>
+  <div class="shape w-12 h-12 top-72 left-10"></div>
+  <div class="shape w-20 h-20 bottom-20 left-32"></div>
+  <div class="shape w-14 h-14 bottom-40 right-40"></div>
+  <div class="shape w-10 h-10 top-24 left-1/2"></div>
+  <div class="shape w-28 h-28 top-2/3 right-10"></div>
+  <div class="shape w-16 h-16 bottom-12 left-1/4"></div>
+  <div class="shape w-12 h-12 top-1/3 left-8"></div>
+  <div class="shape w-20 h-20 bottom-1/3 right-16"></div>
+  <div class="shape w-10 h-10 top-1/4 right-1/3"></div>
+  <div class="shape w-14 h-14 bottom-1/4 left-1/2"></div>
+  <div class="shape w-12 h-12 bottom-16 right-1/2"></div>
+  <div class="shape w-20 h-20 top-16 right-1/4"></div>
+  <div class="shape w-24 h-24 bottom-10 left-10"></div>
+
+  <!-- Terms Container -->
+  <div id="termsContainer" class="w-full max-w-lg bg-gray-900/90 backdrop-blur-md rounded-2xl shadow-lg p-6 flex flex-col fade-in z-10">
+    <h2 class="text-2xl font-bold mb-4 text-center tracking-wide">Terms & Conditions</h2>
+
+    <!-- Scrollable Terms -->
+    <div class="overflow-y-auto h-64 p-4 bg-gray-800/80 rounded-xl text-sm leading-relaxed text-gray-300 border border-gray-700 shadow-lg">
+        <h2 class="text-lg font-bold text-white mb-3">Pokas Nation - Terms & Conditions</h2>
+        
+        <p>Welcome to <span class="font-semibold text-red-900">Pokas Nation</span>. By accessing or purchasing from our platform, 
+        you agree to abide by the following Terms and Conditions. Please read them carefully before placing an order.</p><br>
+      
+        <p><span class="font-semibold text-white">1. Products & Availability:</span>  
+        All items displayed on our website are subject to availability. We reserve the right to modify or discontinue 
+        any product without prior notice.</p><br>
+      
+        <p><span class="font-semibold text-white">2. Orders & Payments:</span>  
+        When you place an order, you agree to provide accurate billing and shipping details. Payment must be made in full 
+        before your order is processed and shipped.</p><br>
+      
+        <p><span class="font-semibold text-white">3. Shipping & Delivery:</span>  
+        We strive to deliver your items on time. However, delays may occur due to circumstances beyond our control. 
+        Pokas Nation is not liable for courier delays.</p><br>
+      
+        <p><span class="font-semibold text-white">4. Returns & Exchanges:</span>  
+        Returns are accepted within 7 days of delivery, provided items are unworn, unwashed, and in their original packaging.  
+        Customized items cannot be returned or exchanged.</p><br>
+      
+        <p><span class="font-semibold text-white">5. Intellectual Property:</span>  
+        All logos, designs, and content on Pokas Nation are the property of our brand and cannot be copied or reproduced 
+        without prior written consent.</p><br>
+      
+        <p><span class="font-semibold text-white">6. Agreement:</span>  
+        By purchasing from Pokas Nation, you agree to these terms and confirm compliance with all our policies. 
+        Please scroll to the bottom and check the box to continue.</p>
+      </div>
+      
+
+    <!-- Agreement Checkbox -->
+    <div class="flex items-center mt-4">
+      <input type="checkbox" id="agree" class="w-5 h-5 accent-blue-500">
+      <label for="agree" class="ml-2 text-sm text-gray-300">I agree to the Terms & Conditions</label>
+    </div>
+
+    <!-- Continue Button -->
+    <button id="continueBtn" class="hidden mt-6 w-full py-3 bg-transparent border border-white rounded-2xl font-semibold transition flex items-center justify-center gap-2 hover:bg-white hover:text-black">
+        <i class="fas fa-arrow-right"></i> Continue
+      </button>
+      
+  </div>
+
+  <div id="authContainer" class="hidden w-full max-w-md bg-gray-900/90 backdrop-blur-md rounded-2xl shadow-lg p-6 flex flex-col items-center fade-in z-10">
+    <h2 class="text-2xl font-bold mb-6 tracking-wide">Welcome</h2>
+    <p class="text-gray-400 text-sm mb-6 text-center">Choose an option below to continue</p>
+  
+    <!-- Grid for Login + Create Account -->
+    <div class="grid grid-cols-2 gap-4 w-full mb-4">
+      <a href="login.html" class="w-full py-3 border border-white text-white rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white hover:text-black transition">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </a>
+      <a href="register.html" class="w-full py-3 border border-white text-white rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white hover:text-black transition">
+        <i class="fas fa-user-plus"></i> Create
+      </a>
+    </div>
+  
+    <!-- Reset Password Button -->
+    <a href="reset-password.html" class="w-full py-3 border border-white text-white rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white hover:text-black transition">
+      <i class="fas fa-key"></i> Reset Password
+    </a>
+  </div>
+  
+  
+
+  <script>
+    const agree = document.getElementById("agree");
+    const continueBtn = document.getElementById("continueBtn");
+    const termsContainer = document.getElementById("termsContainer");
+    const authContainer = document.getElementById("authContainer");
+
+    agree.addEventListener("change", () => {
+      continueBtn.classList.toggle("hidden", !agree.checked);
+    });
+
+    continueBtn.addEventListener("click", () => {
+      termsContainer.classList.add("hidden");
+      authContainer.classList.remove("hidden");
+    });
+  </script>
+  <script src="tailwind.js"></script>
+</body>
+</html>

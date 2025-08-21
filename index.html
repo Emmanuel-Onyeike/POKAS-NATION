@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splash Screen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/WhatsApp Image 2025-08-21 at 00.21.37.jpeg" type="image/x-icon" />
+  <style>
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .fade-in-scale {
+      animation: fadeInScale 2s ease-out forwards;
+    }
+    .fade-out {
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spin {
+      animation: spin 2.5s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-black flex items-center justify-center min-h-screen">
+
+  <div id="splash" class="flex flex-col items-center fade-in-scale">
+    <!-- Your Logo -->
+    <img src="WhatsApp Image 2025-08-21 at 00.21.37.jpeg" alt="Logo" class="w-44 h-44 object-contain mb-8">
+
+    <!-- Sewing Machine Spinner (SVG) -->
+   
+
+    <p class="text-sm font-medium text-gray-500 mt-6">Powered by TechNxxt</p>
+  </div>
+
+  <script>
+    const splash = document.getElementById("splash");
+    window.onload = function() {
+      setTimeout(() => {
+        splash.classList.add("fade-out");
+        setTimeout(() => {
+          window.location.href = "welcome.html";
+        }, 1000); // wait for fade-out before redirect
+      }, 5000);
+    };
+  </script>
+  <script src="tailwind.js"></script>
+</body>
+</html>
