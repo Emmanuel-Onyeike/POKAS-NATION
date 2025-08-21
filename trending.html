@@ -232,36 +232,367 @@
     <!-- Hero Banner -->
     <section class="relative bg-gradient-to-r from-red-600 to-red-400 rounded-2xl overflow-hidden mb-12 shadow-xl">
       <div class="p-8 sm:p-12 md:p-16 flex flex-col justify-center items-center text-center">
-        <h2 class="text-3xl sm:text-5xl font-extrabold mb-2 tracking-tight drop-shadow-md">✨ Hot Trending!</h2>
+        <h2 class="text-3xl sm:text-5xl font-extrabold mb-2 tracking-tight drop-shadow-md">✨ New Trendings!</h2>
         <p class="text-base sm:text-lg max-w-xl mb-6 font-light drop-shadow">Discover the latest trends and upgrade your style with our exclusive new collection. Limited stock available.</p>
-        <a href="arrivals.html" class="inline-block bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-transform transform hover:scale-105 shadow-md">Shop Now</a>
+        <a href="trending.html" class="inline-block bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-transform transform hover:scale-105 shadow-md">Shop Now</a>
       </div>
     </section>
+    <style>
+      body {
+          font-family: 'Inter', sans-serif;
+          background-color: #0d0d0d;
+          color: #e0e0e0;
+      }
 
-    <section class="flex flex-col items-center justify-center text-center py-20 bg-[#0a0a0a] relative">
-        <div class="absolute inset-0 bg-transparent opacity-50 z-10"></div>
-        <div class="relative z-20">
-          <h2 class="coming-soon-text text-6xl sm:text-7xl md:text-8xl font-extrabold mb-4">
-            COMING SOON
-          </h2>
-          <p class="text-2xl sm:text-3xl font-semibold text-white mb-6">Cooking to serve you the best</p>
-          <i class="fas fa-shirt text-4xl text-red-500 animate-bounce"></i>
-        </div>
-      </section>
+      /* Custom animation for the product modal */
+      @keyframes modal-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+      }
+      @keyframes modal-scale-up {
+          from { transform: scale(0.9); }
+          to { transform: scale(1); }
+      }
+      #product-modal.show {
+          display: flex;
+          animation: modal-fade-in 0.3s ease-out forwards;
+      }
+      .modal-content-box {
+          animation: modal-scale-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      /* Custom scrollbar for desktop */
+      .custom-scrollbar::-webkit-scrollbar {
+          height: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+          background: #2a2a2a;
+          border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: #4a4a4a;
+          border-radius: 10px;
+          border: 2px solid #0d0d0d;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background-color: #6a6a6a;
+      }
+
+      /* Custom backdrop filter */
+      .frosted-bg {
+          backdrop-filter: blur(10px) brightness(0.8);
+          -webkit-backdrop-filter: blur(10px) brightness(0.8);
+      }
+
+      /* Custom gradient for card background */
+      .card-bg-gradient {
+          background-image: linear-gradient(135deg, #1f1f1f, #151515);
+      }
+  </style>
+    <section id="new-trendings" class="mb-12">
+      <div class="flex items-center justify-between mb-8">
+        <h3 class="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-500">
+              ✨ New Trendings
+          </h3>
+      </div>
+
+      <!-- Main container for products: horizontal scroll on mobile, grid on desktop -->
+      <div class="flex overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4 md:overflow-x-visible custom-scrollbar">
+
+          <!-- Product Card 1 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 13.jpeg" alt="Product 1: Midnight Shadow T-Shirt" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Midnight Shadow T-Shirt</h4>
+                  <p class="text-gray-400 font-medium">$45.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Midnight Shadow T-Shirt"
+                      data-product-price="45.00"
+                      data-product-image="card 13.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 17.jpeg" alt="Product 2: Urban Explorer Hoodie" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Urban Explorer Hoodie</h4>
+                  <p class="text-gray-400 font-medium">$75.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Urban Explorer Hoodie"
+                      data-product-price="75.00"
+                      data-product-image="card 17.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 16.jpeg" alt="Product 3: Classic Black Joggers" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Classic Black Joggers</h4>
+                  <p class="text-gray-400 font-medium">$60.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Classic Black Joggers"
+                      data-product-price="60.00"
+                      data-product-image="card 16.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 14.jpeg" alt="Product 4: Street-Style Windbreaker" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Street-Style Windbreaker</h4>
+                  <p class="text-gray-400 font-medium">$90.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Street-Style Windbreaker"
+                      data-product-price="90.00"
+                      data-product-image="card 14.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 5 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 11.jpeg" alt="Product 5: Oversized Cargo Pants" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Oversized Cargo Pants</h4>
+                  <p class="text-gray-400 font-medium">$80.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Oversized Cargo Pants"
+                      data-product-price="80.00"
+                      data-product-image="card 11.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 6 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card10.jpeg" alt="Product 6: Bold Graphic Crewneck" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Bold Graphic Crewneck</h4>
+                  <p class="text-gray-400 font-medium">$65.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Bold Graphic Crewneck"
+                      data-product-price="65.00"
+                      data-product-image="card10.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 7 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 6.jpeg" alt="Product 7: High-Top Canvas Sneakers" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">High-Top Canvas Sneakers</h4>
+                  <p class="text-gray-400 font-medium">$120.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="High-Top Canvas Sneakers"
+                      data-product-price="120.00"
+                      data-product-image="card 6.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+
+          <!-- Product Card 8 -->
+          <div class="flex-shrink-0 w-64 sm:w-72 snap-center mr-6 md:w-auto md:mr-0 relative card-bg-gradient rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <div class="relative z-10 w-full flex flex-col items-center">
+                  <img src="card 5.jpeg" alt="Product 8: Slim-Fit Biker Jeans" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+                  <h4 class="text-lg font-semibold text-gray-100">Slim-Fit Biker Jeans</h4>
+                  <p class="text-gray-400 font-medium">$95.00</p>
+                  <button
+                      class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+                      data-product-name="Slim-Fit Biker Jeans"
+                      data-product-price="95.00"
+                      data-product-image="card 5.jpeg">
+                      Add to Cart
+                  </button>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Product Modal (Hidden by default) -->
+  <div id="product-modal" class="hidden fixed inset-0 z-50 overflow-y-auto frosted-bg flex items-center justify-center p-4">
+      <div class="relative bg-[#1a1a1a] rounded-xl max-w-lg w-full p-8 text-center modal-content-box shadow-2xl">
+          <!-- Close Button -->
+          <button id="close-product-modal-btn" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white transition-colors">
+              <i class="fas fa-times"></i>
+          </button>
+
+          <!-- Product Image -->
+          <img id="modal-product-image" src="" alt="Product Image" class="w-full h-auto rounded-lg mb-6">
+
+          <!-- Product Name & Price -->
+          <h3 id="modal-product-name" class="text-3xl font-bold text-white mb-2"></h3>
+          <p id="modal-product-price" class="text-2xl text-red-500 font-semibold mb-6"></p>
+
+          <!-- Quantity Selector -->
+          <div class="flex items-center justify-center space-x-6 mb-8">
+              <button id="decrease-quantity-btn" class="text-gray-400 hover:text-white transition-colors text-3xl">
+                  <i class="fas fa-minus-circle"></i>
+              </button>
+              <span id="quantity-display" class="font-bold text-2xl text-white">1</span>
+              <button id="increase-quantity-btn" class="text-gray-400 hover:text-white transition-colors text-3xl">
+                  <i class="fas fa-plus-circle"></i>
+              </button>
+          </div>
+
+          <!-- Size Selector -->
+          <div class="mb-8">
+              <h4 class="text-lg font-semibold text-gray-200 mb-3">Select Size</h4>
+              <div id="size-options" class="flex flex-wrap justify-center gap-3">
+                  <button class="size-btn px-4 py-2 border-2 border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition-all duration-200" data-size="S">S</button>
+                  <button class="size-btn px-4 py-2 border-2 border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition-all duration-200" data-size="M">M</button>
+                  <button class="size-btn px-4 py-2 border-2 border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition-all duration-200" data-size="L">L</button>
+                  <button class="size-btn px-4 py-2 border-2 border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition-all duration-200" data-size="XL">XL</button>
+                  <button class="size-btn px-4 py-2 border-2 border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition-all duration-200" data-size="XXL">XXL</button>
+              </div>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <button id="modal-add-to-cart-btn" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-transform transform hover:scale-105 shadow-md">
+              Add to Cart
+          </button>
+      </div>
+  </div>
+
+  <!-- Confirmation Message Box -->
+  <div id="confirmation-message" class="fixed bottom-4 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-lg text-white font-bold opacity-0 transition-opacity duration-300 z-50" style="background-color: #38a169;">
+      Item added to cart!
+  </div>
+
+  <script>
+      // DOM element references
+      const productModal = document.getElementById('product-modal');
+      const closeProductModalBtn = document.getElementById('close-product-modal-btn');
+      const modalProductName = document.getElementById('modal-product-name');
+      const modalProductPrice = document.getElementById('modal-product-price');
+      const modalProductImage = document.getElementById('modal-product-image');
+      const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+      const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
+      const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
+      const quantityDisplay = document.getElementById('quantity-display');
+      const sizeOptions = document.getElementById('size-options');
+      const sizeButtons = document.querySelectorAll('.size-btn');
+      const modalAddToCartBtn = document.getElementById('modal-add-to-cart-btn');
+      const confirmationMessage = document.getElementById('confirmation-message');
+
+      // State to hold the current product data
+      let currentProduct = {};
+
+      // Function to show the modal with product details
+      function showProductModal(productName, productPrice, productImage) {
+          // Populate modal with product data
+          modalProductName.textContent = productName;
+          modalProductPrice.textContent = `$${parseFloat(productPrice).toFixed(2)}`;
+          modalProductImage.src = productImage;
+          
+          // Set current product state
+          currentProduct = { name: productName, price: productPrice, image: productImage, quantity: 1, size: '' };
+
+          // Reset modal state
+          quantityDisplay.textContent = '1';
+          sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600', 'bg-red-700'));
+          
+          // Show modal and disable body scroll
+          productModal.classList.add('show');
+          document.body.style.overflow = 'hidden';
+      }
+
+      // Function to hide the modal
+      function hideProductModal() {
+          productModal.classList.remove('show');
+          document.body.style.overflow = '';
+      }
       
-      <style>
-        /* Stroke + Reflection */
-        .coming-soon-text {
-          color: transparent; /* Fill transparent */
-          -webkit-text-stroke: 2px #fff; /* White outline */
-          text-stroke: 2px #fff; /* fallback */
-          font-weight: 900;
-          position: relative;
-          display: inline-block;
-          -webkit-box-reflect: below 5px
-            linear-gradient(transparent, rgba(255, 255, 255, 0.15));
-        }
-      </style>
+      // Function to show a confirmation message
+      function showConfirmationMessage(message) {
+          confirmationMessage.textContent = message;
+          confirmationMessage.classList.add('opacity-100');
+          setTimeout(() => {
+              confirmationMessage.classList.remove('opacity-100');
+          }, 2000); // Message disappears after 2 seconds
+      }
+
+      // Event listener for size selection
+      sizeOptions.addEventListener('click', (event) => {
+          if (event.target.classList.contains('size-btn')) {
+              // Remove 'selected' style from all buttons
+              sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600', 'bg-red-700'));
+              // Add 'selected' style to the clicked button
+              event.target.classList.add('bg-red-600', 'border-red-600', 'bg-red-700');
+              // Update product size in state
+              currentProduct.size = event.target.dataset.size;
+          }
+      });
+
+      // Event listener for quantity increase
+      increaseQuantityBtn.addEventListener('click', () => {
+          let currentQuantity = parseInt(quantityDisplay.textContent);
+          quantityDisplay.textContent = currentQuantity + 1;
+          currentProduct.quantity = currentQuantity + 1;
+      });
+
+      // Event listener for quantity decrease
+      decreaseQuantityBtn.addEventListener('click', () => {
+          let currentQuantity = parseInt(quantityDisplay.textContent);
+          if (currentQuantity > 1) {
+              quantityDisplay.textContent = currentQuantity - 1;
+              currentProduct.quantity = currentQuantity - 1;
+          }
+      });
+
+      // Event listeners for "Add to Cart" buttons on the product cards
+      addToCartButtons.forEach(button => {
+          button.addEventListener('click', (event) => {
+              const name = event.target.dataset.productName;
+              const price = event.target.dataset.productPrice;
+              const image = event.target.dataset.productImage;
+              showProductModal(name, price, image);
+          });
+      });
+      
+      // Event listener for "Add to Cart" button inside the modal
+      modalAddToCartBtn.addEventListener('click', () => {
+          if (currentProduct.size === '') {
+              showConfirmationMessage('Please select a size!');
+              return;
+          }
+          // In a real application, you would handle the cart logic here
+          // For this example, we'll just show a confirmation message
+          console.log('Adding to cart:', currentProduct);
+          showConfirmationMessage('Item added to cart!');
+          hideProductModal();
+      });
+
+      // Event listener for closing the modal
+      closeProductModalBtn.addEventListener('click', hideProductModal);
+
+      // Close the modal if the user clicks outside of the content
+      productModal.addEventListener('click', (event) => {
+          if (event.target === productModal) {
+              hideProductModal();
+          }
+      });
+  </script>
       
 </main>
 

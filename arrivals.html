@@ -241,7 +241,7 @@
     <section id="new-arrivals" class="mb-12">
       <div class="flex items-center justify-between mb-8">
         <h3 class="text-3xl font-bold tracking-tight">✨ New Arrivals</h3>
-       
+    
       </div>
     
       <!-- Main container for products: horizontal scroll on mobile, grid on desktop -->
@@ -518,28 +518,52 @@
             </button>
           </div>
         </div>
-        
-        <!-- Product Card 18 -->
-       
     
+        <!-- Product Card 18 -->
+      
       </div>
     </section>
     
     <!-- Product Modal (Hidden by default) -->
     <div id="product-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 flex items-center justify-center p-4">
       <div class="relative bg-gray-900 rounded-lg max-w-lg w-full p-8 text-center modal-content-box">
+        <!-- Close Button -->
         <button id="close-product-modal-btn" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white transition-colors">
           <i class="fas fa-times"></i>
         </button>
+    
+        <!-- Product Image -->
         <img id="modal-product-image" src="" alt="Product Image" class="w-full h-auto rounded-lg mb-6">
+    
+        <!-- Product Name & Price -->
         <h3 id="modal-product-name" class="text-3xl font-bold text-white mb-2"></h3>
         <p id="modal-product-price" class="text-2xl text-red-500 font-semibold mb-6"></p>
-        <div class="flex items-center justify-center space-x-4 mb-6">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle text-2xl"></i></button>
-          <span class="font-semibold text-lg text-white">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle text-2xl"></i></button>
+    
+        <!-- Quantity Selector -->
+        <div class="flex items-center justify-center space-x-6 mb-8">
+          <button id="decrease-quantity-btn" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fas fa-minus-circle text-2xl"></i>
+          </button>
+          <span id="quantity-display" class="font-semibold text-xl text-white">1</span>
+          <button id="increase-quantity-btn" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fas fa-plus-circle text-2xl"></i>
+          </button>
         </div>
-        <button class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-transform transform hover:scale-105">
+    
+        <!-- Size Selector -->
+        <div class="mb-8">
+          <h4 class="text-lg font-semibold text-gray-200 mb-3">Select Size</h4>
+          <div id="size-options" class="flex flex-wrap justify-center gap-3">
+            <button class="size-btn px-4 py-2 border border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition" data-size="S">S</button>
+            <button class="size-btn px-4 py-2 border border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition" data-size="M">M</button>
+            <button class="size-btn px-4 py-2 border border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition" data-size="L">L</button>
+            <button class="size-btn px-4 py-2 border border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition" data-size="XL">XL</button>
+            <button class="size-btn px-4 py-2 border border-gray-500 rounded-lg text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition" data-size="XXL">XXL</button>
+          </div>
+        </div>
+    
+        <!-- Add to Cart Button -->
+        <button class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-transform transform hover:scale-105 shadow-md">
           Add to Cart
         </button>
       </div>
@@ -573,11 +597,21 @@
       const modalProductImage = document.getElementById('modal-product-image');
       const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
     
+      // New variables for quantity and size selectors
+      const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
+      const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
+      const quantityDisplay = document.getElementById('quantity-display');
+      const sizeOptions = document.getElementById('size-options');
+      const sizeButtons = document.querySelectorAll('.size-btn');
+    
       // Function to show the modal with product details
       function showProductModal(productName, productPrice, productImage) {
         modalProductName.textContent = productName;
         modalProductPrice.textContent = productPrice;
         modalProductImage.src = productImage;
+        // Reset quantity and size selection every time the modal opens
+        quantityDisplay.textContent = '1';
+        sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600'));
         productModal.classList.add('show');
         document.body.style.overflow = 'hidden'; // Prevents scrolling
       }
@@ -588,7 +622,31 @@
         document.body.style.overflow = '';
       }
     
-      // Event listeners for Add to Cart buttons
+      // Function to handle quantity increase
+      increaseQuantityBtn.addEventListener('click', () => {
+        let currentQuantity = parseInt(quantityDisplay.textContent);
+        quantityDisplay.textContent = currentQuantity + 1;
+      });
+    
+      // Function to handle quantity decrease
+      decreaseQuantityBtn.addEventListener('click', () => {
+        let currentQuantity = parseInt(quantityDisplay.textContent);
+        if (currentQuantity > 1) {
+          quantityDisplay.textContent = currentQuantity - 1;
+        }
+      });
+    
+      // Event listener for size selection
+      sizeOptions.addEventListener('click', (event) => {
+        if (event.target.classList.contains('size-btn')) {
+          // Remove 'selected' style from all buttons
+          sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600'));
+          // Add 'selected' style to the clicked button
+          event.target.classList.add('bg-red-600', 'border-red-600');
+        }
+      });
+    
+      // Event listeners for Add to Cart buttons on the product cards
       addToCartButtons.forEach(button => {
         button.addEventListener('click', (event) => {
           const name = event.target.dataset.productName;
@@ -607,7 +665,6 @@
           hideProductModal();
         }
       });
-    
     </script>
     
       
