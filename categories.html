@@ -125,56 +125,42 @@
   </div>
 
   <!-- Cart Modal -->
-  <div id="cart-modal" class="modal-slide-right fixed inset-y-0 right-0 w-full max-w-sm z-50 bg-gray-900 shadow-2xl p-6 md:p-8">
-    <button id="close-cart-btn" class="absolute top-6 left-6 text-2xl text-gray-400 hover:text-white transition-colors">
-      <i class="fas fa-times"></i>
+  <div id="cart-modal" class="modal-slide-right fixed inset-y-0 right-0 w-full max-w-md z-50 bg-gray-900 shadow-2xl p-8 md:p-10 rounded-l-2xl">
+    <!-- Close Button -->
+    <button id="close-cart-btn" class="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full border border-white text-gray-300 hover:bg-white/10 hover:text-white transition">
+      <i class="fas fa-times text-lg"></i>
     </button>
-    <h3 class="text-3xl font-bold mb-6 text-center">Your Cart</h3>
-    <div class="flex flex-col space-y-4 overflow-y-auto h-full pr-2">
-      <!-- Cart Items -->
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Sport Joggers</p>
-          <p class="text-gray-400 text-sm">$35.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Vintage Graphic Tee</p>
-          <p class="text-gray-400 text-sm">$30.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Exclusive Black Hoodie</p>
-          <p class="text-gray-400 text-sm">$75.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
+  
+    <!-- Cart Header -->
+    <h2 class="text-3xl font-extrabold text-white mb-8 flex items-center gap-4 tracking-tight pl-12">
+      <i class="fas fa-shopping-cart text-green-400 text-2xl"></i>
+      <span>Your Cart</span>
+    </h2>
+  
+    <!-- Empty Cart State -->
+    <div id="empty-cart" class="flex flex-col items-center justify-center text-center mt-20 space-y-3">
+      <i class="fas fa-shopping-bag text-7xl text-gray-500 opacity-70"></i>
+      <h3 class="text-xl font-semibold text-gray-200">Your cart is empty</h3>
+      <p class="text-gray-400 text-sm max-w-xs">Browse our collection and add items you love to get started.</p>
     </div>
-    <div class="mt-8 pt-4 border-t border-gray-700 flex justify-between font-bold text-lg">
-      <span>Subtotal:</span>
-      <span>$140.00</span>
+  
+    <!-- Cart Items Container -->
+    <div id="cart-items" class="hidden flex flex-col gap-5 max-h-[22rem] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+      <!-- Dynamic cart items will go here -->
     </div>
-    <button class="mt-6 w-full py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-transform transform hover:scale-105">Checkout</button>
+  
+    <!-- Checkout Section -->
+    <div id="checkout-section" class="hidden mt-8 border-t border-gray-700 pt-6">
+      <div class="flex justify-between text-white font-semibold text-xl mb-6">
+        <span>Total:</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
+        Checkout Securely
+      </button>
+    </div>
   </div>
+  
 
   <!-- Header -->
   <header class="bg-[#101010] shadow-md sticky top-0 z-40">
@@ -200,7 +186,7 @@
         </button>
         <button id="open-cart-btn" class="relative group">
           <i class="fas fa-shopping-cart text-xl hover:text-red-500 transition animate-wiggle"></i>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-xs px-2 py-0.5 rounded-full font-bold">2</span>
+        
         </button>
         <a href="#" class="relative hidden sm:block group">
           <i class="fas fa-heart text-xl hover:text-red-500 transition animate-wiggle"></i>
@@ -241,7 +227,6 @@
         <p class="inline-block text-lg font-semibold tracking-wide px-12">
           🔥 FREE SHIPPING on all orders over $50 | LIMITED TIME OFFER: Buy one, get one 50% off! 🔥
         </p>
-      </div>
     </section>
 
     <!-- Hero Banner -->

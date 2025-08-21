@@ -125,56 +125,42 @@
   </div>
 
   <!-- Cart Modal -->
-  <div id="cart-modal" class="modal-slide-right fixed inset-y-0 right-0 w-full max-w-sm z-50 bg-gray-900 shadow-2xl p-6 md:p-8">
-    <button id="close-cart-btn" class="absolute top-6 left-6 text-2xl text-gray-400 hover:text-white transition-colors">
-      <i class="fas fa-times"></i>
+  <div id="cart-modal" class="modal-slide-right fixed inset-y-0 right-0 w-full max-w-md z-50 bg-gray-900 shadow-2xl p-8 md:p-10 rounded-l-2xl">
+    <!-- Close Button -->
+    <button id="close-cart-btn" class="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full border border-white text-gray-300 hover:bg-white/10 hover:text-white transition">
+      <i class="fas fa-times text-lg"></i>
     </button>
-    <h3 class="text-3xl font-bold mb-6 text-center">Your Cart</h3>
-    <div class="flex flex-col space-y-4 overflow-y-auto h-full pr-2">
-      <!-- Cart Items -->
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Sport Joggers</p>
-          <p class="text-gray-400 text-sm">$35.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Vintage Graphic Tee</p>
-          <p class="text-gray-400 text-sm">$30.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
-      <div class="flex items-center justify-between bg-gray-800 p-4 rounded-lg">
-        <img src="https://placehold.co/100x100/1a1a1a/cccccc" alt="Cart Item" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1 ml-4">
-          <p class="font-semibold">Exclusive Black Hoodie</p>
-          <p class="text-gray-400 text-sm">$75.00</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-minus-circle"></i></button>
-          <span class="font-semibold">1</span>
-          <button class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-plus-circle"></i></button>
-        </div>
-      </div>
+  
+    <!-- Cart Header -->
+    <h2 class="text-3xl font-extrabold text-white mb-8 flex items-center gap-4 tracking-tight pl-12">
+      <i class="fas fa-shopping-cart text-green-400 text-2xl"></i>
+      <span>Your Cart</span>
+    </h2>
+  
+    <!-- Empty Cart State -->
+    <div id="empty-cart" class="flex flex-col items-center justify-center text-center mt-20 space-y-3">
+      <i class="fas fa-shopping-bag text-7xl text-gray-500 opacity-70"></i>
+      <h3 class="text-xl font-semibold text-gray-200">Your cart is empty</h3>
+      <p class="text-gray-400 text-sm max-w-xs">Browse our collection and add items you love to get started.</p>
     </div>
-    <div class="mt-8 pt-4 border-t border-gray-700 flex justify-between font-bold text-lg">
-      <span>Subtotal:</span>
-      <span>$140.00</span>
+  
+    <!-- Cart Items Container -->
+    <div id="cart-items" class="hidden flex flex-col gap-5 max-h-[22rem] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+      <!-- Dynamic cart items will go here -->
     </div>
-    <button class="mt-6 w-full py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-transform transform hover:scale-105">Checkout</button>
+  
+    <!-- Checkout Section -->
+    <div id="checkout-section" class="hidden mt-8 border-t border-gray-700 pt-6">
+      <div class="flex justify-between text-white font-semibold text-xl mb-6">
+        <span>Total:</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <button class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
+        Checkout Securely
+      </button>
+    </div>
   </div>
+  
 
   <!-- Header -->
   <header class="bg-[#101010] shadow-md sticky top-0 z-40">
@@ -200,7 +186,7 @@
         </button>
         <button id="open-cart-btn" class="relative group">
           <i class="fas fa-shopping-cart text-xl hover:text-red-500 transition animate-wiggle"></i>
-          <span class="absolute -top-2 -right-2 bg-red-500 text-xs px-2 py-0.5 rounded-full font-bold">2</span>
+        
         </button>
         <a href="#" class="relative hidden sm:block group">
           <i class="fas fa-heart text-xl hover:text-red-500 transition animate-wiggle"></i>
@@ -291,37 +277,60 @@
 
     <!-- Trending Products Section (Fiery) -->
     <section id="trending-products" class="mb-12">
-      <h3 class="text-3xl font-bold mb-8 tracking-tight">🔥 Trending Products</h3>
+      <div class="flex items-center justify-between mb-8">
+        <h3 class="text-3xl font-bold tracking-tight">🔥 Trending Products</h3>
+        <a href="trending.html" 
+           class="px-4 py-2 border border-white text-white rounded-lg font-semibold hover:bg-white hover:text-black transition">
+           See More →
+        </a>
+      </div>
+    
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+        <!-- Product Card 1 -->
         <div class="relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
           <div class="absolute inset-0 bg-gradient-to-tr from-red-800 to-yellow-600 blur-2xl opacity-50 z-0 animate-pulse-glow"></div>
           <div class="relative z-10 w-full flex flex-col items-center">
             <img src="image.png" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
             <h4 class="text-lg font-semibold text-gray-100">Streetwear Denim Jacket</h4>
             <p class="text-gray-400 font-medium">$85.00</p>
-            <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">Add to Cart</button>
+            <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">
+              Add to Cart
+            </button>
           </div>
         </div>
+    
+        <!-- Product Card 2 -->
         <div class="bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group">
           <img src="image copy.png" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
           <h4 class="text-lg font-semibold text-gray-100">Vintage Graphic Tee</h4>
           <p class="text-gray-400 font-medium">$30.00</p>
-          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">Add to Cart</button>
+          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">
+            Add to Cart
+          </button>
         </div>
+    
+        <!-- Product Card 3 -->
         <div class="bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group">
           <img src="image copy 2.png" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
           <h4 class="text-lg font-semibold text-gray-100">Comfortable Hoodie</h4>
           <p class="text-gray-400 font-medium">$45.00</p>
-          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">Add to Cart</button>
+          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">
+            Add to Cart
+          </button>
         </div>
+    
+        <!-- Product Card 4 -->
         <div class="bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group">
           <img src="image copy 3.png" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
           <h4 class="text-lg font-semibold text-gray-100">Sport Joggers</h4>
           <p class="text-gray-400 font-medium">$35.00</p>
-          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">Add to Cart</button>
+          <button class="mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0">
+            Add to Cart
+          </button>
         </div>
       </div>
     </section>
+    
 
     <!-- Our Story Section -->
     <section class="bg-transparent border border-white rounded-2xl p-8 md:p-12 mb-12 shadow-xl flex flex-col md:flex-row items-center gap-8">
@@ -334,7 +343,7 @@
       </div>
     </section>
     
-   <section class="bg-transparent border border-white rounded-2xl p-8 md:p-12 mb-12 shadow-xl flex flex-col-reverse md:flex-row items-center gap-8">
+    <section class="bg-transparent border border-white rounded-2xl p-8 md:p-12 mb-12 shadow-xl flex flex-col-reverse md:flex-row items-center gap-8">
       <!-- Image First for Mobile (above text) -->
       <div class="w-full md:w-1/2">
         <img src="brand 2.jpeg" alt="Our Story Image" class="w-full rounded-2xl shadow-lg transform hover:scale-105 transition-transform duration-300 border border-white">
@@ -389,6 +398,17 @@
       </div>
     </section>
 
+  
+    <style>
+      .testimonial-card {
+        border: 1px solid white;
+        border-radius: 16px;
+        background: transparent;
+        padding: 20px;
+        text-align: left;
+      }
+    </style>
+    
     <!-- Newsletter Section -->
     <section class="bg-transparent border-2 border-white rounded-2xl p-8 text-center mb-12 shadow-xl">
       <h3 class="text-3xl font-bold mb-4 tracking-tight text-white">Join Our Newsletter</h3>
