@@ -744,6 +744,152 @@
   toggleModal(profileModal, openProfileBtn, closeProfileBtn);
   toggleModal(cartModal, openCartBtn, closeCartBtn);
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Select all 'Add to Cart' buttons
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart-btn');
+    const closeCartBtn = document.getElementById('close-cart-btn');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const emptyCartMessage = document.getElementById('empty-cart');
+    const checkoutSection = document.getElementById('checkout-section');
+    const cartTotalDisplay = document.getElementById('cart-total');
+    const cartItemCountSpan = document.getElementById('cart-item-count');
+
+    // Select success message elements
+    const successModal = document.createElement('div');
+    successModal.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50', 'hidden');
+    successModal.innerHTML = `
+        <div class="bg-[#1a1a1a] p-8 rounded-lg shadow-xl text-center relative max-w-sm mx-4 border-2 border-green-500 transform scale-95 transition-transform duration-300 ease-out">
+            <div class="text-green-500 mb-4 text-5xl animate-pop-in">✔</div>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-2">Added Successfully!</h3>
+            <p class="text-gray-400">The item has been added to your cart.</p>
+            <button class="absolute top-2 right-2 text-gray-500 hover:text-white transition">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+    `;
+    document.body.appendChild(successModal);
+
+    const closeSuccessModalBtn = successModal.querySelector('button');
+
+    // Function to show the success message
+    const showSuccessMessage = () => {
+        successModal.classList.remove('hidden');
+        successModal.querySelector('div').style.transform = 'scale(1)';
+
+        setTimeout(() => {
+            hideSuccessMessage();
+        }, 5000);
+    };
+
+    // Function to hide the success message
+    const hideSuccessMessage = () => {
+        successModal.querySelector('div').style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            successModal.classList.add('hidden');
+        }, 300);
+    };
+
+    // Event listener to close success message manually
+    closeSuccessModalBtn.addEventListener('click', hideSuccessMessage);
+
+    // Cart array to store product data
+    let cart = [];
+
+    // Function to update cart display and calculate total
+    const updateCart = () => {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        // Check if cart is empty
+        if (cart.length === 0) {
+            emptyCartMessage.classList.remove('hidden');
+            checkoutSection.classList.add('hidden');
+            cartItemsContainer.classList.add('hidden');
+        } else {
+            emptyCartMessage.classList.add('hidden');
+            checkoutSection.classList.remove('hidden');
+            cartItemsContainer.classList.remove('hidden');
+
+            // Create a grid container for the items
+            const gridContainer = document.createElement('div');
+            gridContainer.classList.add('grid', 'grid-cols-2', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'gap-4', 'mt-4');
+
+            cart.forEach(item => {
+                total += parseFloat(item.price);
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('relative', 'bg-gray-800', 'p-3', 'rounded-lg', 'shadow-md', 'flex', 'flex-col', 'items-center', 'text-center', 'space-y-2');
+                itemElement.innerHTML = `
+                    <button class="remove-from-cart absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mb-2">
+                    <h5 class="text-xs sm:text-sm text-white font-semibold line-clamp-2">${item.name}</h5>
+                    <p class="text-green-400 font-bold text-sm">${item.price}</p>
+                `;
+
+                // Add event listener to the remove button
+                itemElement.querySelector('.remove-from-cart').addEventListener('click', () => {
+                    cart = cart.filter(product => product.name !== item.name);
+                    updateCart();
+                });
+
+                gridContainer.appendChild(itemElement);
+            });
+
+            cartItemsContainer.appendChild(gridContainer);
+        }
+
+        // Update total price and item count
+        cartTotalDisplay.textContent = `$${total.toFixed(2)}`;
+        if (cartItemCountSpan) {
+            cartItemCountSpan.textContent = cart.length;
+            if (cart.length > 0) {
+                cartItemCountSpan.classList.remove('hidden');
+            } else {
+                cartItemCountSpan.classList.add('hidden');
+            }
+        }
+    };
+
+    // Add event listeners to all 'Add to Cart' buttons
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const productName = e.currentTarget.dataset.productName;
+            const productPrice = e.currentTarget.dataset.productPrice.replace('$', '');
+            const productImage = e.currentTarget.dataset.productImage;
+
+            const existingProduct = cart.find(item => item.name === productName);
+            if (!existingProduct) {
+                cart.push({
+                    name: productName,
+                    price: productPrice,
+                    image: productImage
+                });
+                showSuccessMessage();
+                updateCart();
+            } else {
+                alert('This item is already in your cart!');
+            }
+        });
+    });
+
+    // Open cart modal
+    openCartBtn.addEventListener('click', () => {
+        cartModal.classList.remove('modal-slide-right');
+    });
+
+    // Close cart modal
+    closeCartBtn.addEventListener('click', () => {
+        cartModal.classList.add('modal-slide-right');
+    });
+
+    // Initial cart state update
+    updateCart();
+});
+</script>
 <script src="tailwind.js"></script>
 </body>
 </html>
