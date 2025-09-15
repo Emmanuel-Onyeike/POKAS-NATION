@@ -756,7 +756,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
     const quantityDisplay = document.getElementById('quantity-display');
     const sizeOptions = document.getElementById('size-options');
-    const modalAddToCartBtn = productModal.querySelector('.add-to-cart-btn');
+    // NOTE: This button is inside the product modal.
+    const modalAddToCartBtn = productModal.querySelector('.add-to-cart-btn'); 
     const allProductCards = document.querySelectorAll('.flex-shrink-0');
 
     // === Success Message and Cart Display Elements ===
@@ -767,7 +768,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyCartMessage = document.getElementById('empty-cart');
     const checkoutSection = document.getElementById('checkout-section');
     const cartTotalDisplay = document.getElementById('cart-total');
-    const cartItemCountSpan = document.getElementById('cart-item-count');
+    // Using a class selector for the count display
+    const cartItemCountSpan = document.querySelector('.cart-item-count');
 
     // === Success Message Pop-up ===
     const successModal = document.createElement('div');
@@ -852,8 +854,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartTotalDisplay.textContent = `$${total.toFixed(2)}`;
         if (cartItemCountSpan) {
-            cartItemCountSpan.textContent = cart.length;
-            if (cart.length > 0) {
+            // Recalculate the cart item count
+            const totalItemsInCart = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartItemCountSpan.textContent = totalItemsInCart;
+            if (totalItemsInCart > 0) {
                 cartItemCountSpan.classList.remove('hidden');
             } else {
                 cartItemCountSpan.classList.add('hidden');
@@ -863,7 +867,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === Event Listeners ===
 
-    // 1. Open Product Modal when a card is clicked
+    // 1. Open Product Modal when a card's "Add to Cart" button is clicked
     allProductCards.forEach(card => {
         const cardAddBtn = card.querySelector('.add-to-cart-btn');
         const productName = cardAddBtn.dataset.productName;
@@ -883,7 +887,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentQuantity = 1;
             quantityDisplay.textContent = currentQuantity;
             currentSize = '';
-            
+
             // Clear and reset size selections
             sizeOptions.querySelectorAll('.size-btn').forEach(btn => {
                 btn.classList.remove('bg-red-600', 'border-red-600');
@@ -932,10 +936,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Check if an existing item with the same name and size is in the cart
         const existingItem = cart.find(item => item.name === currentProductData.name && item.size === currentSize);
         if (existingItem) {
+            // If it exists, just update its quantity
             existingItem.quantity += currentQuantity;
         } else {
+            // Otherwise, add a new item
             cart.push({
                 ...currentProductData,
                 quantity: currentQuantity,
@@ -943,8 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        updateCart();
-        showSuccessMessage();
+        updateCart(); // Refresh the cart display
+        showSuccessMessage(); // Show success pop-up
         productModal.classList.add('hidden'); // Close the product modal
     });
 
