@@ -794,7 +794,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
     const quantityDisplay = document.getElementById('quantity-display');
     const sizeOptions = document.getElementById('size-options');
-    // NOTE: This button is inside the product modal.
     const modalAddToCartBtn = productModal.querySelector('.w-full.py-3');
     const allProductCards = document.querySelectorAll('.flex-shrink-0');
 
@@ -858,26 +857,39 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutSection.classList.remove('hidden');
             cartItemsContainer.classList.remove('hidden');
 
-            const gridContainer = document.createElement('div');
-            gridContainer.classList.add('grid', 'grid-cols-2', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'gap-4', 'mt-4');
+            // Use vertical stacked layout instead of grid
+            const listContainer = document.createElement('div');
+            listContainer.classList.add('flex', 'flex-col', 'space-y-4', 'mt-4', 'w-full');
 
             cart.forEach(item => {
                 const itemPrice = parseFloat(item.price.replace('$', '')) * item.quantity;
                 total += itemPrice;
 
                 const itemElement = document.createElement('div');
-                itemElement.classList.add('relative', 'bg-gray-800', 'p-4', 'rounded-xl', 'shadow-lg', 'flex', 'flex-col', 'items-center', 'text-center', 'space-y-3', 'w-full', 'sm:w-[200px]', 'md:w-auto');
+                itemElement.classList.add(
+                    'relative',
+                    'bg-gray-800',
+                    'p-4',
+                    'rounded-xl',
+                    'shadow-lg',
+                    'flex',
+                    'items-center',
+                    'justify-between',
+                    'w-full'
+                );
                 itemElement.innerHTML = `
-                    <button class="remove-from-cart absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors text-lg" aria-label="Remove item">
+                    <div class="flex items-center space-x-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md border border-gray-700">
+                        <div class="flex flex-col">
+                            <h5 class="text-base sm:text-lg text-white font-semibold">${item.name}</h5>
+                            <p class="text-green-400 font-bold text-sm">Qty: ${item.quantity} | Size: ${item.size}</p>
+                            <p class="text-gray-400 font-medium text-sm">Price: $${parseFloat(item.price.replace('$', '')).toFixed(2)}</p>
+                            <p class="text-gray-200 font-bold text-base">Total: $${itemPrice.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <button class="remove-from-cart text-gray-400 hover:text-red-500 transition-colors text-xl ml-4" aria-label="Remove item">
                         <i class="fas fa-times-circle"></i>
                     </button>
-                    <img src="${item.image}" alt="${item.name}" class="w-28 h-28 object-cover rounded-md border border-gray-700 mb-2">
-                    <div class="flex flex-col items-center">
-                        <h5 class="text-sm sm:text-base text-white font-semibold line-clamp-2">${item.name}</h5>
-                        <p class="text-green-400 font-bold text-base mt-1">Qty: ${item.quantity} | Size: ${item.size}</p>
-                        <p class="text-gray-400 font-medium text-sm mt-1">Price: $${(parseFloat(item.price.replace('$', ''))).toFixed(2)}</p>
-                        <p class="text-gray-400 font-bold text-base mt-1">Total: $${itemPrice.toFixed(2)}</p>
-                    </div>
                 `;
 
                 itemElement.querySelector('.remove-from-cart').addEventListener('click', () => {
@@ -885,10 +897,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateCart();
                 });
 
-                gridContainer.appendChild(itemElement);
+                listContainer.appendChild(itemElement);
             });
 
-            cartItemsContainer.appendChild(gridContainer);
+            cartItemsContainer.appendChild(listContainer);
         }
 
         cartTotalDisplay.textContent = `$${total.toFixed(2)}`;
@@ -904,11 +916,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // === Event Listeners ===
-
-    // 1. Open Product Modal when a card's "Add to Cart" button is clicked
     allProductCards.forEach(card => {
         const cardAddBtn = card.querySelector('.add-to-cart-btn');
-        if (cardAddBtn) { // Check to ensure the button exists
+        if (cardAddBtn) {
             cardAddBtn.addEventListener('click', (e) => {
                 const productName = e.currentTarget.dataset.productName;
                 const productPrice = e.currentTarget.dataset.productPrice;
@@ -936,12 +946,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Close Product Modal
     closeProductModalBtn.addEventListener('click', () => {
         productModal.classList.add('hidden');
     });
 
-    // 3. Quantity Controls in Modal
     increaseQuantityBtn.addEventListener('click', () => {
         currentQuantity++;
         quantityDisplay.textContent = currentQuantity;
@@ -954,7 +962,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 4. Size Selection
     sizeOptions.addEventListener('click', (e) => {
         if (e.target.classList.contains('size-btn')) {
             sizeOptions.querySelectorAll('.size-btn').forEach(btn => {
@@ -967,7 +974,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 5. "Add to Cart" Button Inside the Modal
     modalAddToCartBtn.addEventListener('click', () => {
         if (!currentSize) {
             alert('Please select a size before adding to cart.');
@@ -990,10 +996,8 @@ document.addEventListener('DOMContentLoaded', () => {
         productModal.classList.add('hidden');
     });
 
-    // 6. Manual close for success message
     closeSuccessModalBtn.addEventListener('click', hideSuccessMessage);
 
-    // 7. Open/Close the main cart modal
     openCartBtn.addEventListener('click', () => {
         cartModal.classList.remove('modal-slide-right');
     });
@@ -1001,10 +1005,10 @@ document.addEventListener('DOMContentLoaded', () => {
         cartModal.classList.add('modal-slide-right');
     });
 
-    // Initial state update
     updateCart();
 });
 </script>
+
 <script src="tailwind.js"></script>
 </body>
 </html>
