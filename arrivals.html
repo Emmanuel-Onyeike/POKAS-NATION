@@ -821,10 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 tracking-wide">Success!</h3>
     <p class="text-lg text-gray-300 mb-6">Your item has been added to the cart.</p>
-    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50">
-        View Cart
-        <i class="fas fa-shopping-cart ml-2"></i>
-    </button>
+  
 </div>
     `;
     document.body.appendChild(successModal);
@@ -869,16 +866,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemPrice = parseFloat(item.price.replace('$', '')) * item.quantity;
                 total += itemPrice;
 
-                const itemElement = document.createElement('div');
-                itemElement.classList.add('relative', 'bg-gray-800', 'p-3', 'rounded-lg', 'shadow-md', 'flex', 'flex-col', 'items-center', 'text-center', 'space-y-2');
-                itemElement.innerHTML = `
-                    <button class="remove-from-cart absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mb-2">
-                    <h5 class="text-xs sm:text-sm text-white font-semibold line-clamp-2">${item.name}</h5>
-                    <p class="text-green-400 font-bold text-sm">Qty: ${item.quantity} | Size: ${item.size}</p>
-                    <p class="text-gray-400 font-medium text-xs">Total: $${itemPrice.toFixed(2)}</p>
+             const itemElement = document.createElement('div');
+itemElement.classList.add('relative', 'bg-gray-800', 'p-4', 'rounded-xl', 'shadow-lg', 'flex', 'flex-col', 'items-center', 'text-center', 'space-y-3', 'w-full', 'sm:w-[200px]', 'md:w-auto');
+itemElement.innerHTML = `
+    <button class="remove-from-cart absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors text-lg" aria-label="Remove item">
+        <i class="fas fa-times-circle"></i>
+    </button>
+    <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded-md border border-gray-700 mb-2">
+    <div class="flex flex-col items-center">
+        <h5 class="text-sm sm:text-base text-white font-semibold line-clamp-2">${item.name}</h5>
+        <p class="text-green-400 font-bold text-base mt-1">Qty: ${item.quantity} | Size: ${item.size}</p>
+        <p class="text-gray-400 font-medium text-sm mt-1">Price: $${(parseFloat(item.price.replace('$', ''))).toFixed(2)}</p>
+        <p class="text-gray-400 font-bold text-base mt-1">Total: $${itemPrice.toFixed(2)}</p>
+    </div>
+`;
                 `;
 
                 itemElement.querySelector('.remove-from-cart').addEventListener('click', () => {
