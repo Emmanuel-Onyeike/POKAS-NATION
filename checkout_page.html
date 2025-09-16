@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #1a1a1a; /* Almost black */
+        }
+        /* Custom styles for the active button state */
+        .tab-button.active {
+            border-bottom: 2px solid #ef4444; /* Red border for active tab */
+            color: #ffffff; /* White text for active tab */
+        }
+    </style>
+</head>
+<body class="text-white font-sans">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <button id="delivery-tab" class="tab-button active text-sm sm:text-base font-semibold px-2 py-1 sm:px-4 sm:py-2 transition-colors duration-200">
+                    Delivery
+                </button>
+                <button id="payment-tab" class="tab-button text-sm sm:text-base font-semibold px-2 py-1 sm:px-4 sm:py-2 transition-colors duration-200">
+                    Payment
+                </button>
+                <button id="summary-tab" class="tab-button text-sm sm:text-base font-semibold px-2 py-1 sm:px-4 sm:py-2 transition-colors duration-200">
+                    Summary
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <section id="delivery-content" class="tab-content">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6">Delivery Information</h2>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <p>Please enter your delivery address and contact details here.</p>
+                </div>
+        </section>
+
+        <section id="payment-content" class="tab-content hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6">Payment Method</h2>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <p>Choose your preferred payment method and enter your details.</p>
+                </div>
+        </section>
+
+        <section id="summary-content" class="tab-content hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-6">Order Summary</h2>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <p>Review your order details, including items, costs, and chosen options.</p>
+                </div>
+        </section>
+        
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+        
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove 'active' class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add 'active' class to the clicked tab
+                    tab.classList.add('active');
+        
+                    // Hide all content sections
+                    contents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Show the corresponding content section
+                    const targetId = tab.id.replace('-tab', '-content');
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
