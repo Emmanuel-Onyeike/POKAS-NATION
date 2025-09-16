@@ -162,13 +162,57 @@
   </div>
 </section>
 
-     <section id="payment-content" class="tab-content hidden">
+ <style>
+    /* Base styles for all payment cards */
+    .payment-method-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        will-change: transform, box-shadow;
+    }
+
+    /* Hover effect for selectable cards on larger screens */
+    @media (min-width: 640px) {
+        .payment-method-card:not(.locked):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #dc2626; /* red-600 */
+        }
+    }
+    
+    /* Selected state for cards */
+    .payment-method-card.selected {
+        background-color: #fff; /* White background for selected card */
+        border-color: #dc2626; /* Red border for selected card */
+    }
+    .payment-method-card.selected h3, 
+    .payment-method-card.selected p {
+        color: #dc2626; /* Red text for selected card */
+    }
+
+    /* Adjust grid for mobile (single column) and desktop (multiple columns) */
+    .payment-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+        .payment-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .payment-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>
+
+<section id="payment-content" class="tab-content hidden">
     <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Payment Method</h2>
     <div class="bg-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="payment-grid mb-8">
 
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="pay-on-delivery">
                 <i class="fas fa-truck text-3xl text-red-500"></i>
                 <div>
                     <h3 class="font-bold text-lg text-white">Pay on Delivery</h3>
@@ -176,7 +220,7 @@
                 </div>
             </div>
 
-            <div class="relative bg-gray-700 p-5 rounded-xl opacity-50 cursor-not-allowed">
+            <div class="payment-method-card relative bg-gray-700 p-5 rounded-xl opacity-50 cursor-not-allowed locked">
                 <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-xl">
                     <span class="text-white font-bold text-sm text-center">Coming Soon</span>
                 </div>
@@ -189,56 +233,63 @@
                 </div>
             </div>
 
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="eco-bank">
                 <img src="https://example.com/ecobank-logo.png" alt="Eco Bank Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">Eco Bank</h3>
                     <p class="text-sm text-gray-400">Bank Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="opay">
                 <img src="https://example.com/opay-logo.png" alt="Opay Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">Opay</h3>
                     <p class="text-sm text-gray-400">Mobile Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="first-bank">
                 <img src="https://example.com/firstbank-logo.png" alt="First Bank Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">First Bank</h3>
                     <p class="text-sm text-gray-400">Bank Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+            
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="access-bank">
                 <img src="https://example.com/accessbank-logo.png" alt="Access Bank Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">Access Bank</h3>
                     <p class="text-sm text-gray-400">Bank Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="zenith-bank">
                 <img src="https://example.com/zenithbank-logo.png" alt="Zenith Bank Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">Zenith Bank</h3>
                     <p class="text-sm text-gray-400">Bank Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+            
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="palmpay">
                 <img src="https://example.com/palmpay-logo.png" alt="PalmPay Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">PalmPay</h3>
                     <p class="text-sm text-gray-400">Mobile Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+            
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="moniepoint">
                 <img src="https://example.com/moniepoint-logo.png" alt="Moniepoint Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">Moniepoint</h3>
                     <p class="text-sm text-gray-400">Bank Transfer</p>
                 </div>
             </div>
-            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent hover:border-red-600 transition-all duration-300 cursor-pointer flex items-center space-x-4">
+
+            <div class="payment-method-card bg-gray-800 p-5 rounded-xl border-2 border-transparent cursor-pointer flex items-center space-x-4" data-method="fcmb">
                 <img src="https://example.com/fcmb-logo.png" alt="FCMB Logo" class="w-8 h-8 rounded-full">
                 <div>
                     <h3 class="font-bold text-lg text-white">FCMB</h3>
@@ -279,6 +330,21 @@
     </div>
 </section>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const paymentCards = document.querySelectorAll('.payment-method-card:not(.locked)');
+        
+        paymentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove 'selected' class from all cards
+                paymentCards.forEach(c => c.classList.remove('selected'));
+                
+                // Add 'selected' class to the clicked card
+                card.classList.add('selected');
+            });
+        });
+    });
+</script>
         <section id="summary-content" class="tab-content hidden">
             <h2 class="text-2xl sm:text-3xl font-bold mb-6">Order Summary</h2>
             <div class="bg-gray-800 p-6 rounded-lg shadow-md">
