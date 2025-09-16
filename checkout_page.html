@@ -626,324 +626,314 @@
             <p class="text-gray-300">Chat with us on WhatsApp: <a href="https://wa.me/2348012345678" target="_blank" class="text-red-500 hover:underline">+234 801 234 5678</a></p>
         </div>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const confirmBtn = document.getElementById('confirm-order-btn');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const successModal = document.getElementById('success-modal');
+        const whatsappModal = document.getElementById('whatsapp-modal');
+        const closeWhatsappBtn = document.getElementById('close-whatsapp-modal');
+        const trackingModal = document.getElementById('tracking-modal');
+        const minimizeTrackingBtn = document.getElementById('minimize-tracking-modal');
+        const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
+        const customerCareBtns = document.querySelectorAll('.customer-care-btn');
+        const closeModals = document.querySelectorAll('.close-modal');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const confirmBtn = document.getElementById('confirm-order-btn');
-            const loadingOverlay = document.getElementById('loading-overlay');
-            const successModal = document.getElementById('success-modal');
-            const whatsappModal = document.getElementById('whatsapp-modal');
-            const closeWhatsappBtn = document.getElementById('close-whatsapp-modal');
-            const trackingModal = document.getElementById('tracking-modal');
-            const minimizeTrackingBtn = document.getElementById('minimize-tracking-modal');
-            const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
-            const customerCareBtns = document.querySelectorAll('.customer-care-btn');
-            const closeModals = document.querySelectorAll('.close-modal');
+        // --- Tracking variables and functions START ---
+        const steps = [
+            { id: "ordered", delay: 180000 },       // 3 mins
+            { id: "packing", delay: 180000 },       // 3 mins
+            { id: "on-the-road", delay: 180000 },   // 3 mins
+            { id: "nearest-station", delay: 3600000 },// 1 hr
+            { id: "received", delay: 0 }            // final
+        ];
 
-            function generateOrderNumber() {
-                const prefix = "pokas-";
-                const randomPart = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                return prefix + randomPart.substring(0, 20);
+        let currentStep = 0;
+
+        function activateStep(index) {
+            const step = steps[index];
+            const stepEl = document.querySelector(`.tracking-step[data-stage="${step.id}"]`);
+            const statusText = document.getElementById("current-tracking-stage");
+
+            if (stepEl) {
+                stepEl.classList.add("active");
+                stepEl.querySelector("i").classList.remove("text-gray-500");
+                stepEl.querySelector("i").classList.add("text-red-500");
+                statusText.textContent = step.id.replace("-", " ").toUpperCase();
             }
 
-            function getDeliveryDate() {
-                const date = new Date();
-                date.setDate(date.getDate() + 2);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                return date.toLocaleDateString('en-US', options);
-            }
+            // Animate progress line
+            updateProgressLine(index);
 
-            confirmBtn.addEventListener('click', () => {
-                loadingOverlay.classList.remove('hidden');
-
+            // Schedule next step
+            if (index < steps.length - 1) {
                 setTimeout(() => {
-                    loadingOverlay.classList.add('hidden');
-                    
-                    document.getElementById('order-number').textContent = generateOrderNumber();
-                    document.getElementById('delivery-date').textContent = getDeliveryDate();
-                    successModal.classList.remove('hidden');
-
-                    setTimeout(() => {
-                        successModal.classList.add('hidden');
-                        whatsappModal.classList.remove('hidden');
-                    }, 3000); // 3 seconds
-                }, 5000); // 5 seconds
-            });
-
-            closeWhatsappBtn.addEventListener('click', () => {
-                whatsappModal.classList.add('hidden');
-                trackingModal.classList.remove('hidden');
-                updateTrackingProgress();
-            });
-
-            let trackingInterval;
-            function updateTrackingProgress() {
-                const stages = ['ordered', 'packing', 'on-the-road', 'nearest-station', 'received'];
-                const stageNames = {
-                    'ordered': 'Order Confirmed',
-                    'packing': 'Packaging',
-                    'on-the-road': 'On The Road',
-                    'nearest-station': 'At Nearest Station',
-                    'received': 'Delivered'
-                };
-                const steps = document.querySelectorAll('.tracking-step');
-
-                let currentStepIndex = 0;
-                trackingInterval = setInterval(() => {
-                    if (currentStepIndex < stages.length) {
-                        const stage = stages[currentStepIndex];
-                        const step = document.querySelector(`[data-stage="${stage}"]`);
-                        
-                        step.querySelector('i').classList.remove('text-gray-500');
-                        step.querySelector('i').classList.add('text-red-500');
-                        step.querySelector('p').classList.remove('text-gray-400');
-                        step.querySelector('p').classList.add('text-white');
-                        document.getElementById('current-tracking-stage').textContent = stageNames[stage];
-
-                        const percent = (currentStepIndex / (stages.length - 1)) * 100;
-                        document.getElementById('tracking-line').style.width = `${percent}%`;
-
-                        if (currentStepIndex === stages.length - 1) {
-                            clearInterval(trackingInterval);
-                            setTimeout(() => {
-                                steps.forEach(s => {
-                                    s.querySelector('i').classList.remove('text-red-500');
-                                    s.querySelector('i').classList.add('text-green-500');
-                                });
-                                document.getElementById('current-tracking-stage').textContent = 'Received';
-                            }, 2000); // Wait 2 seconds before final color change for effect
-                        } else {
-                            currentStepIndex++;
+                    // Update previous step to "completed" state
+                    if (index > 0) {
+                        const prevStepEl = document.querySelector(`.tracking-step[data-stage="${steps[index - 1].id}"]`);
+                        if (prevStepEl) {
+                            prevStepEl.classList.add("completed");
+                            prevStepEl.querySelector("i").classList.remove("text-red-500");
+                            prevStepEl.querySelector("i").classList.add("text-green-500");
+                            prevStepEl.querySelector("p").classList.remove("text-gray-400");
+                            prevStepEl.querySelector("p").classList.add("text-white");
                         }
                     }
-                }, 1000); // 1-second interval for demonstration
+                    activateStep(index + 1);
+                }, step.delay);
+            } else {
+                 // Final step is complete
+                 if (stepEl) {
+                    stepEl.classList.add("completed");
+                    stepEl.querySelector("i").classList.remove("text-red-500");
+                    stepEl.querySelector("i").classList.add("text-green-500");
+                    stepEl.querySelector("p").classList.remove("text-gray-400");
+                    stepEl.querySelector("p").classList.add("text-white");
+                 }
             }
-
-            minimizeTrackingBtn.addEventListener('click', () => {
-                trackingModal.classList.add('hidden');
-                minimizedTrackingIcon.classList.remove('hidden');
-            });
-
-            minimizedTrackingIcon.addEventListener('click', () => {
-                trackingModal.classList.remove('hidden');
-                minimizedTrackingIcon.classList.add('hidden');
-            });
-
-            customerCareBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const type = e.currentTarget.dataset.type;
-                    document.getElementById(`${type}-modal`).classList.remove('hidden');
-                });
-            });
-
-            closeModals.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.target.closest('.fixed').classList.add('hidden');
-                });
-            });
-        });
-    </script>
-      <style>
-        .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .modal-content {
-            transform: scale(0.95);
-        }
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal.active .modal-content {
-            transform: scale(1);
         }
 
-        /* Tracking step styles */
-        .tracking-step i {
-            transition: color 0.5s ease;
-        }
-        .tracking-step p {
-            transition: color 0.5s ease;
-        }
-    </style>
-    </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.tab-button');
-            const contents = document.querySelectorAll('.tab-content');
+        function updateProgressLine(index) {
+            const trackingLine = document.getElementById("tracking-line");
+            if (!trackingLine) return; // Exit if element not found
             
-            // --- Cart Data Retrieval ---
-            let cart = [];
-            try {
-                const storedCart = localStorage.getItem('cartItems');
-                if (storedCart) {
-                    cart = JSON.parse(storedCart);
+            const totalSteps = steps.length - 1;
+            const progress = (index / totalSteps) * 100;
+
+            // This single line animation will be smoother and more robust
+            trackingLine.style.width = `${progress}%`;
+        }
+        // --- Tracking variables and functions END ---
+
+        function generateOrderNumber() {
+            const prefix = "pokas-";
+            const randomPart = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            return prefix + randomPart.substring(0, 20);
+        }
+
+        function getDeliveryDate() {
+            const date = new Date();
+            date.setDate(date.getDate() + 2);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        confirmBtn.addEventListener('click', () => {
+            loadingOverlay.classList.remove('hidden');
+
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                
+                document.getElementById('order-number').textContent = generateOrderNumber();
+                document.getElementById('delivery-date').textContent = getDeliveryDate();
+                successModal.classList.remove('hidden');
+
+                setTimeout(() => {
+                    successModal.classList.add('hidden');
+                    whatsappModal.classList.remove('hidden');
+                }, 3000); // 3 seconds
+            }, 5000); // 5 seconds
+        });
+
+        closeWhatsappBtn.addEventListener('click', () => {
+            whatsappModal.classList.add('hidden');
+            trackingModal.classList.remove('hidden');
+            // Start the tracking process
+            activateStep(currentStep);
+        });
+
+        // The old updateTrackingProgress and trackingInterval logic is replaced
+        // by the new activateStep function and setTimeout logic.
+        // No need to call updateTrackingProgress here anymore.
+
+        minimizeTrackingBtn.addEventListener('click', () => {
+            trackingModal.classList.add('hidden');
+            minimizedTrackingIcon.classList.remove('hidden');
+        });
+
+        minimizedTrackingIcon.addEventListener('click', () => {
+            trackingModal.classList.remove('hidden');
+            minimizedTrackingIcon.classList.add('hidden');
+        });
+
+        customerCareBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const type = e.currentTarget.dataset.type;
+                document.getElementById(`${type}-modal`).classList.remove('hidden');
+            });
+        });
+
+        closeModals.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.target.closest('.fixed').classList.add('hidden');
+            });
+        });
+        
+        // --- Tab, Address, and Shipping Logic (unchanged) ---
+        const tabs = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+        let cart = [];
+        try {
+            const storedCart = localStorage.getItem('cartItems');
+            if (storedCart) {
+                cart = JSON.parse(storedCart);
+            }
+        } catch (e) {
+            console.error("Failed to retrieve cart from local storage:", e);
+            localStorage.removeItem('cartItems');
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                contents.forEach(content => content.classList.add('hidden'));
+                const targetId = tab.id.replace('-tab', '-content');
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
+
+        const countryInput = document.getElementById('country');
+        const stateSelect = document.getElementById('state');
+        const saveAddressBtn = document.getElementById('save-address-btn');
+        const changeAddressBtn = document.getElementById('change-address-btn');
+        const addressFormFields = document.getElementById('address-form-fields');
+        const cityInput = document.getElementById('city');
+        const streetInput = document.getElementById('street');
+
+        const nigerianStates = [
+            "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River", "Delta",
+            "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi",
+            "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto",
+            "Taraba", "Yobe", "Zamfara"
+        ];
+
+        const populateStates = () => {
+            stateSelect.innerHTML = '<option value="">Select your state...</option>';
+            nigerianStates.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state;
+                option.textContent = state;
+                stateSelect.appendChild(option);
+            });
+        };
+
+        countryInput.addEventListener('input', (e) => {
+            if (e.target.value.toLowerCase() === 'nigeria') {
+                populateStates();
+                stateSelect.disabled = false;
+            } else {
+                stateSelect.innerHTML = '<option value="">Select your state...</option>';
+                stateSelect.disabled = true;
+            }
+        });
+
+        saveAddressBtn.addEventListener('click', () => {
+            const inputs = addressFormFields.querySelectorAll('input, select');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    allFilled = false;
                 }
-            } catch (e) {
-                console.error("Failed to retrieve cart from local storage:", e);
-                // Clear localStorage if data is corrupted
-                localStorage.removeItem('cartItems');
+            });
+
+            if (allFilled) {
+                inputs.forEach(input => input.disabled = true);
+                saveAddressBtn.classList.add('hidden');
+                changeAddressBtn.classList.remove('hidden');
+                alert('Address details saved!');
+            } else {
+                alert('Please fill in all address details.');
+            }
+        });
+
+        changeAddressBtn.addEventListener('click', () => {
+            const inputs = addressFormFields.querySelectorAll('input, select');
+            inputs.forEach(input => input.disabled = false);
+            saveAddressBtn.classList.remove('hidden');
+            changeAddressBtn.classList.add('hidden');
+        });
+
+        const deliveryMethodRadios = document.querySelectorAll('input[name="delivery-method"]');
+        const pickupLocationField = document.getElementById('pickup-location-field');
+
+        deliveryMethodRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'pickup-station') {
+                    pickupLocationField.classList.remove('hidden');
+                } else {
+                    pickupLocationField.classList.add('hidden');
+                }
+            });
+        });
+
+        const shippingDetailsContainer = document.getElementById('shipping-details');
+        const shippingTotalDisplay = document.getElementById('shipping-total');
+        const continueBtn = document.getElementById('continue-btn');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+
+        const updateShippingDetails = () => {
+            shippingDetailsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                continueBtn.disabled = true;
+                continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                continueBtn.disabled = false;
+                continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
 
-            // --- Tab Switching Logic ---
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    contents.forEach(content => content.classList.add('hidden'));
-                    const targetId = tab.id.replace('-tab', '-content');
-                    document.getElementById(targetId).classList.remove('hidden');
-                });
-            });
+            cart.forEach(item => {
+                const itemTotal = parseFloat(item.price) * item.quantity;
+                total += itemTotal;
 
-            // --- Address Details Logic ---
-            const countryInput = document.getElementById('country');
-            const stateSelect = document.getElementById('state');
-            const saveAddressBtn = document.getElementById('save-address-btn');
-            const changeAddressBtn = document.getElementById('change-address-btn');
-            const addressFormFields = document.getElementById('address-form-fields');
-            const cityInput = document.getElementById('city');
-            const streetInput = document.getElementById('street');
-
-            const nigerianStates = [
-                "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River", "Delta",
-                "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi",
-                "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto",
-                "Taraba", "Yobe", "Zamfara"
-            ];
-
-            const populateStates = () => {
-                stateSelect.innerHTML = '<option value="">Select your state...</option>';
-                nigerianStates.forEach(state => {
-                    const option = document.createElement('option');
-                    option.value = state;
-                    option.textContent = state;
-                    stateSelect.appendChild(option);
-                });
-            };
-
-            countryInput.addEventListener('input', (e) => {
-                if (e.target.value.toLowerCase() === 'nigeria') {
-                    populateStates();
-                    stateSelect.disabled = false;
-                } else {
-                    stateSelect.innerHTML = '<option value="">Select your state...</option>';
-                    stateSelect.disabled = true;
-                }
-            });
-
-            saveAddressBtn.addEventListener('click', () => {
-                const inputs = addressFormFields.querySelectorAll('input, select');
-                let allFilled = true;
-                inputs.forEach(input => {
-                    if (!input.value) {
-                        allFilled = false;
-                    }
-                });
-
-                if (allFilled) {
-                    inputs.forEach(input => input.disabled = true);
-                    saveAddressBtn.classList.add('hidden');
-                    changeAddressBtn.classList.remove('hidden');
-                    alert('Address details saved!');
-                } else {
-                    alert('Please fill in all address details.');
-                }
-            });
-
-            changeAddressBtn.addEventListener('click', () => {
-                const inputs = addressFormFields.querySelectorAll('input, select');
-                inputs.forEach(input => input.disabled = false);
-                saveAddressBtn.classList.remove('hidden');
-                changeAddressBtn.classList.add('hidden');
-            });
-
-            // --- Delivery Method Logic ---
-            const deliveryMethodRadios = document.querySelectorAll('input[name="delivery-method"]');
-            const pickupLocationField = document.getElementById('pickup-location-field');
-
-            deliveryMethodRadios.forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    if (e.target.value === 'pickup-station') {
-                        pickupLocationField.classList.remove('hidden');
-                    } else {
-                        pickupLocationField.classList.add('hidden');
-                    }
-                });
-            });
-
-            // --- Shipping Details and Cart Display Logic ---
-            const shippingDetailsContainer = document.getElementById('shipping-details');
-            const shippingTotalDisplay = document.getElementById('shipping-total');
-            const continueBtn = document.getElementById('continue-btn');
-            const emptyCartMessage = document.getElementById('empty-cart-message');
-
-            const updateShippingDetails = () => {
-                shippingDetailsContainer.innerHTML = '';
-                let total = 0;
-
-                if (cart.length === 0) {
-                    emptyCartMessage.classList.remove('hidden');
-                    continueBtn.disabled = true;
-                    continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                } else {
-                    emptyCartMessage.classList.add('hidden');
-                    continueBtn.disabled = false;
-                    continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                }
-
-                cart.forEach(item => {
-                    const itemTotal = parseFloat(item.price) * item.quantity;
-                    total += itemTotal;
-
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('flex', 'flex-col', 'sm:flex-row', 'items-center', 'justify-between', 'p-4', 'bg-gray-700', 'rounded-lg', 'shadow-md', 'relative');
-                    productElement.innerHTML = `
-                        <div class="flex items-center space-x-4 mb-4 sm:mb-0 w-full sm:w-auto">
-                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md border border-gray-600">
-                            <div class="flex flex-col">
-                                <span class="text-base sm:text-lg font-semibold">${item.name}</span>
-                                <span class="text-sm text-gray-400">Qty: ${item.quantity} | Size: ${item.size}</span>
-                                <span class="text-sm font-bold text-green-400">$${itemTotal.toFixed(2)}</span>
-                            </div>
+                const productElement = document.createElement('div');
+                productElement.classList.add('flex', 'flex-col', 'sm:flex-row', 'items-center', 'justify-between', 'p-4', 'bg-gray-700', 'rounded-lg', 'shadow-md', 'relative');
+                productElement.innerHTML = `
+                    <div class="flex items-center space-x-4 mb-4 sm:mb-0 w-full sm:w-auto">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md border border-gray-600">
+                        <div class="flex flex-col">
+                            <span class="text-base sm:text-lg font-semibold">${item.name}</span>
+                            <span class="text-sm text-gray-400">Qty: ${item.quantity} | Size: ${item.size}</span>
+                            <span class="text-sm font-bold text-green-400">$${itemTotal.toFixed(2)}</span>
                         </div>
-                        <button class="remove-from-shipping text-xl text-red-500 hover:text-red-400 transition-colors" data-id="${item.id}" aria-label="Remove item">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
-                    `;
-                    shippingDetailsContainer.appendChild(productElement);
-                });
-
-                shippingTotalDisplay.textContent = `$${total.toFixed(2)}`;
-            };
-
-            // Event listener for removing items from shipping details
-            shippingDetailsContainer.addEventListener('click', (e) => {
-                const removeBtn = e.target.closest('.remove-from-shipping');
-                if (removeBtn) {
-                    const itemId = parseInt(removeBtn.dataset.id);
-                    cart = cart.filter(item => item.id !== itemId);
-                    updateShippingDetails();
-                }
+                    </div>
+                    <button class="remove-from-shipping text-xl text-red-500 hover:text-red-400 transition-colors" data-id="${item.id}" aria-label="Remove item">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                `;
+                shippingDetailsContainer.appendChild(productElement);
             });
 
-            // --- Continue Button Logic ---
-            continueBtn.addEventListener('click', () => {
-                const activeTab = document.querySelector('.tab-button.active');
-                const paymentTab = document.getElementById('payment-tab');
-                if (activeTab.id === 'delivery-tab') {
-                    if (cart.length === 0) {
-                        alert("Your cart is empty. Please add items before continuing.");
-                        return;
-                    }
-                    paymentTab.click();
-                }
-            });
+            shippingTotalDisplay.textContent = `$${total.toFixed(2)}`;
+        };
 
-            // Initial calls
-            updateShippingDetails();
+        shippingDetailsContainer.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-from-shipping');
+            if (removeBtn) {
+                const itemId = parseInt(removeBtn.dataset.id);
+                cart = cart.filter(item => item.id !== itemId);
+                updateShippingDetails();
+            }
         });
-    </script>
+
+        continueBtn.addEventListener('click', () => {
+            const activeTab = document.querySelector('.tab-button.active');
+            const paymentTab = document.getElementById('payment-tab');
+            if (activeTab.id === 'delivery-tab') {
+                if (cart.length === 0) {
+                    alert("Your cart is empty. Please add items before continuing.");
+                    return;
+                }
+                paymentTab.click();
+            }
+        });
+
+        updateShippingDetails();
+    });
+</script>
 </body>
 </html>
