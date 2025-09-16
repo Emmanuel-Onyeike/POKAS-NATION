@@ -125,99 +125,75 @@
 </div>
 
 <div id="profile-details-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
-  <div class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4 md:mx-auto transform scale-95 transition-transform duration-300 ease-out">
-    <!-- Close button -->
-    <button id="close-profile-details-modal" class="absolute top-5 right-5 text-gray-400 hover:text-red-500 transition-colors text-2xl" aria-label="Close profile details modal">
-      <i class="fas fa-times"></i>
-    </button>
+    <div class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4 md:mx-auto transform scale-95 transition-transform duration-300 ease-out">
+        <button id="close-profile-details-modal" class="absolute top-5 right-5 text-gray-400 hover:text-red-500 transition-colors text-2xl" aria-label="Close profile details modal">
+            <i class="fas fa-times"></i>
+        </button>
 
-    <!-- Profile Picture -->
-    <div class="flex flex-col items-center mb-6">
-      <div class="relative group">
-        <img id="profile-picture" src="https://via.placeholder.com/150" alt="Profile Picture" class="w-32 h-32 rounded-full border-4 border-red-600 object-cover shadow-lg transition-transform duration-300 group-hover:scale-105">
-        <label for="profile-picture-input" class="absolute bottom-2 right-2 bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-700 transition shadow-md">
-          <i class="fas fa-camera text-white text-sm"></i>
-        </label>
-        <input type="file" id="profile-picture-input" accept="image/*" class="hidden">
-      </div>
-      <p class="text-xs text-gray-400 mt-2">Click camera to change photo</p>
+        <div class="flex flex-col items-center mb-6">
+            <div class="relative group">
+                <img id="profile-picture" src="https://via.placeholder.com/150" alt="Profile Picture" class="w-32 h-32 rounded-full border-4 border-red-600 object-cover shadow-lg transition-transform duration-300 group-hover:scale-105">
+                <label for="profile-picture-input" class="absolute bottom-2 right-2 bg-red-600 p-2 rounded-full cursor-pointer hover:bg-red-700 transition shadow-md">
+                    <i class="fas fa-camera text-white text-sm"></i>
+                </label>
+                <input type="file" id="profile-picture-input" accept="image/*" class="hidden">
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Click camera to change photo</p>
+        </div>
+
+        <h2 class="text-2xl font-extrabold text-white mb-6 text-center tracking-wide">User Profile</h2>
+        <div class="space-y-6">
+            
+            <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-user text-2xl text-red-500"></i>
+                    <div>
+                        <h3 class="font-semibold text-sm uppercase text-gray-400">Username</h3>
+                        <p id="profile-details-username" class="text-base text-gray-300 italic">Loading...</p>
+                    </div>
+                </div>
+                <button id="edit-username" class="edit-username text-gray-400 hover:text-white transition">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </div>
+
+            <div id="username-edit-form" class="hidden space-y-3 p-4 bg-gray-800/80 rounded-xl">
+                <label for="new-username" class="block text-gray-300">New Username</label>
+                <input type="text" id="new-username" placeholder="Enter new username" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-red-500">
+                <button id="save-username" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span id="save-username-text">Save Username</span>
+                    <span id="save-username-loading" class="hidden">
+                        <i class="fas fa-spinner fa-spin"></i> Saving...
+                    </span>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-envelope text-2xl text-red-500"></i>
+                    <div>
+                        <h3 class="font-semibold text-sm uppercase text-gray-400">Email</h3>
+                        <p id="profile-details-email" class="text-base text-gray-300 italic">Loading...</p>
+                    </div>
+                </div>
+                </div>
+
+            <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-map-marker-alt text-2xl text-red-500"></i>
+                    <div>
+                        <h3 class="font-semibold text-sm uppercase text-gray-400">Address</h3>
+                        <p id="profile-details-address" class="text-base text-gray-300 italic">Not set</p>
+                    </div>
+                </div>
+                </div>
+            <div id="username-edit-message" class="text-center text-sm font-semibold hidden"></div>
+        </div>
     </div>
-
-    <!-- User Info -->
-    <h2 class="text-2xl font-extrabold text-white mb-6 text-center tracking-wide">User Profile</h2>
-    <div class="space-y-6">
-      
-      <!-- Username -->
-      <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
-        <div class="flex items-center space-x-4">
-          <i class="fas fa-user text-2xl text-red-500"></i>
-          <div>
-            <h3 class="font-semibold text-sm uppercase text-gray-400">Username</h3>
-            <p id="profile-details-username" class="text-base text-gray-300 italic">Not set</p>
-          </div>
-        </div>
-        <button class="edit-username text-gray-400 hover:text-white transition">
-          <i class="fas fa-edit"></i>
-        </button>
-      </div>
-
-      <!-- Email -->
-      <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
-        <div class="flex items-center space-x-4">
-          <i class="fas fa-envelope text-2xl text-red-500"></i>
-          <div>
-            <h3 class="font-semibold text-sm uppercase text-gray-400">Email</h3>
-            <p id="profile-details-email" class="text-base text-gray-300 italic">Not set</p>
-          </div>
-        </div>
-        <button class="edit-email text-gray-400 hover:text-white transition">
-          <i class="fas fa-edit"></i>
-        </button>
-      </div>
-
-      <!-- Address -->
-      <div class="flex items-center justify-between bg-gray-800/60 px-4 py-3 rounded-xl shadow-inner hover:bg-gray-800 transition">
-        <div class="flex items-center space-x-4">
-          <i class="fas fa-map-marker-alt text-2xl text-red-500"></i>
-          <div>
-            <h3 class="font-semibold text-sm uppercase text-gray-400">Address</h3>
-            <p id="profile-details-address" class="text-base text-gray-300 italic">Not set</p>
-          </div>
-        </div>
-        <button class="edit-address text-gray-400 hover:text-white transition">
-          <i class="fas fa-edit"></i>
-        </button>
-      </div>
-
-    </div>
-  </div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const profilePic = document.getElementById("profile-picture");
-  const profilePicInput = document.getElementById("profile-picture-input");
-
-  // Load saved profile picture from localStorage
-  const savedPic = localStorage.getItem("profilePicture");
-  if (savedPic) profilePic.src = savedPic;
-
-  // Update profile picture when user selects a new one
-  profilePicInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const newPic = event.target.result;
-      profilePic.src = newPic;
-      localStorage.setItem("profilePicture", newPic); // Persist after refresh
-    };
-    reader.readAsDataURL(file);
-  });
-});
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 <div id="my-orders-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-300">
     <div class="bg-gray-900 text-white p-8 rounded-2xl shadow-2xl w-full max-w-xl mx-4 md:mx-auto max-h-[80vh] overflow-y-auto transform scale-95 transition-transform duration-300 ease-out">
         <button id="close-my-orders-modal" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors text-2xl" aria-label="Close orders modal">
