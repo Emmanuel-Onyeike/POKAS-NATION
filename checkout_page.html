@@ -69,85 +69,98 @@
     </header>
 
     <main class="pt-8 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section id="delivery-content" class="tab-content">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-6">Delivery Information</h2>
+     <section id="delivery-content" class="tab-content">
+  <h2 class="text-3xl font-extrabold text-white mb-8 text-center">🚚 Delivery Information</h2>
 
-            <div id="address-details" class="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">Address Details</h3>
-                    <div>
-                        <button id="save-address-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors mr-2">
-                            Save
-                        </button>
-                        <button id="change-address-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors hidden">
-                            Change/Edit
-                        </button>
-                    </div>
-                </div>
+  <!-- Address Details -->
+  <div id="address-details" class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl shadow-xl mb-10 border border-gray-700">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-semibold flex items-center gap-2">
+        <i class="fas fa-map-marker-alt text-red-500"></i> Address Details
+      </h3>
+      <div class="flex gap-2">
+        <button id="save-address-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition transform hover:scale-105">
+          Save
+        </button>
+        <button id="change-address-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition transform hover:scale-105 hidden">
+          Change/Edit
+        </button>
+      </div>
+    </div>
 
-                <div id="address-form-fields" class="space-y-4">
-                    <div>
-                        <label for="country" class="block text-gray-400 mb-1">Country</label>
-                        <input type="text" id="country" placeholder="e.g., Nigeria" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                    </div>
-                    <div>
-                        <label for="state" class="block text-gray-400 mb-1">State</label>
-                        <select id="state" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                            <option value="">Select your state...</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="city" class="block text-gray-400 mb-1">City</label>
-                        <input type="text" id="city" placeholder="e.g., Port Harcourt" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                    </div>
-                    <div>
-                        <label for="street" class="block text-gray-400 mb-1">Home Address</label>
-                        <input type="text" id="street" placeholder="e.g., 123 Pokas Street" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                    </div>
-                </div>
-            </div>
+    <div id="address-form-fields" class="space-y-5">
+      <div>
+        <label for="country" class="block text-gray-400 mb-1">Country</label>
+        <input type="text" id="country" placeholder="e.g., Nigeria" class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+      </div>
+      <div>
+        <label for="state" class="block text-gray-400 mb-1">State</label>
+        <select id="state" class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+          <option value="">Select your state...</option>
+        </select>
+      </div>
+      <div>
+        <label for="city" class="block text-gray-400 mb-1">City</label>
+        <input type="text" id="city" placeholder="e.g., Port Harcourt" class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+      </div>
+      <div>
+        <label for="street" class="block text-gray-400 mb-1">Home Address</label>
+        <input type="text" id="street" placeholder="e.g., 123 Pokas Street" class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+      </div>
+    </div>
+  </div>
 
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-                <h3 class="text-xl font-semibold mb-4">Delivery Method</h3>
-                <div class="space-y-4">
-                    <label class="flex items-center space-x-3 cursor-pointer">
-                        <input type="radio" name="delivery-method" value="door-delivery" class="form-radio text-red-500 h-5 w-5">
-                        <span class="text-lg">Door Delivery</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer">
-                        <input type="radio" name="delivery-method" value="pickup-station" class="form-radio text-red-500 h-5 w-5">
-                        <span class="text-lg">Pickup Station</span>
-                    </label>
-                    <label class="flex items-center space-x-3">
-                        <input type="radio" name="delivery-method" value="coming-soon" disabled class="form-radio text-gray-500 h-5 w-5">
-                        <span class="text-lg text-gray-500">Coming Soon</span>
-                    </label>
-                </div>
-                <div id="pickup-location-field" class="mt-4 hidden">
-                    <label for="pickup-location" class="block text-gray-400 mb-1">Enter Pickup Station</label>
-                    <input type="text" id="pickup-location" placeholder="e.g., Abuja Central Post Office" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
-                </div>
-            </div>
+  <!-- Delivery Method -->
+  <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl shadow-xl mb-10 border border-gray-700">
+    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+      <i class="fas fa-truck text-red-500"></i> Delivery Method
+    </h3>
+    <div class="space-y-4">
+      <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-700/50 p-3 rounded-lg transition">
+        <input type="radio" name="delivery-method" value="door-delivery" class="form-radio text-red-500 h-5 w-5">
+        <span class="text-lg">Door Delivery</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer hover:bg-gray-700/50 p-3 rounded-lg transition">
+        <input type="radio" name="delivery-method" value="pickup-station" class="form-radio text-red-500 h-5 w-5">
+        <span class="text-lg">Pickup Station</span>
+      </label>
+      <label class="flex items-center gap-3 p-3 rounded-lg opacity-60">
+        <input type="radio" name="delivery-method" value="coming-soon" disabled class="form-radio text-gray-500 h-5 w-5">
+        <span class="text-lg text-gray-500">Coming Soon</span>
+      </label>
+    </div>
 
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
-                <div id="shipping-details" class="space-y-4">
-                    <p id="empty-cart-message" class="text-center text-gray-400 hidden">Your cart is empty.</p>
-                </div>
-                <div class="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
-                    <span class="text-lg font-bold">Subtotal:</span>
-                    <span id="shipping-total" class="text-xl font-bold text-green-400">$0.00</span>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
-                    <a href="dashboard.html" class="flex-1 w-full text-center bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition-colors">
-                        Add More to Cart
-                    </a>
-                    <button id="continue-btn" class="flex-1 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-colors">
-                        Continue to Payment
-                    </button>
-                </div>
-            </div>
-        </section>
+    <div id="pickup-location-field" class="mt-4 hidden">
+      <label for="pickup-location" class="block text-gray-400 mb-1">Enter Pickup Station</label>
+      <input type="text" id="pickup-location" placeholder="e.g., Abuja Central Post Office" class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+    </div>
+  </div>
+
+  <!-- Order Summary -->
+  <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700">
+    <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+      <i class="fas fa-receipt text-red-500"></i> Order Summary
+    </h3>
+
+    <div id="shipping-details" class="space-y-4">
+      <p id="empty-cart-message" class="text-center text-gray-400 hidden">Your cart is empty.</p>
+    </div>
+
+    <div class="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
+      <span class="text-lg font-bold">Subtotal:</span>
+      <span id="shipping-total" class="text-2xl font-extrabold text-green-400">$0.00</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
+      <a href="dashboard.html" class="flex-1 text-center bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition transform hover:scale-105">
+        Add More to Cart
+      </a>
+      <button id="continue-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition transform hover:scale-105">
+        Continue to Payment
+      </button>
+    </div>
+  </div>
+</section>
 
         <section id="payment-content" class="tab-content hidden">
             <h2 class="text-2xl sm:text-3xl font-bold mb-6">Payment Method</h2>
