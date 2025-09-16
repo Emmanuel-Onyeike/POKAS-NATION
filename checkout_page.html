@@ -447,7 +447,7 @@
 
             <div class="text-center mt-6">
                 <button id="confirm-order-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg">
-                    Confirm Order
+                    <i class="fas fa-shopping-cart"></i> Confirm Order
                 </button>
             </div>
         </div>
@@ -457,7 +457,7 @@
         <i class="fas fa-spinner fa-spin text-red-500 text-6xl"></i>
     </div>
 
-    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+    <div id="success-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gradient-to-br from-green-600 via-green-700 to-green-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-sm mx-4 text-center">
             <i class="fas fa-check-circle text-6xl mb-4 text-white"></i>
             <h3 class="text-2xl font-extrabold mb-2">Order Confirmed!</h3>
@@ -470,7 +470,7 @@
         </div>
     </div>
 
-    <div id="whatsapp-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+    <div id="whatsapp-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-md mx-4 text-center">
             <button id="close-whatsapp-modal" class="absolute top-5 right-5 text-gray-200 hover:text-white transition-colors text-2xl" aria-label="Close WhatsApp modal">
                 <i class="fas fa-times"></i>
@@ -490,7 +490,7 @@
         </div>
     </div>
 
-    <div id="tracking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+    <div id="tracking-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4">
             <button id="minimize-tracking-modal" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors text-2xl" aria-label="Minimize tracking modal">
                 <i class="fas fa-window-minimize"></i>
@@ -551,21 +551,21 @@
         <i class="fas fa-truck text-white text-2xl"></i>
     </div>
 
-    <div id="email-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="email-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Email Support</h3>
             <p class="text-gray-300">Email us at: <a href="mailto:support@yourcompany.com" class="text-red-500 hover:underline">support@yourcompany.com</a></p>
         </div>
     </div>
-    <div id="call-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="call-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Call Us</h3>
             <p class="text-gray-300">Call our helpline: <a href="tel:+2348012345678" class="text-red-500 hover:underline">+234 801 234 5678</a></p>
         </div>
     </div>
-    <div id="chat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="chat-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Chat Support</h3>
@@ -585,7 +585,26 @@
             const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
             const customerCareBtns = document.querySelectorAll('.customer-care-btn');
             const closeModals = document.querySelectorAll('.close-modal');
-            const bellSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // Replace with your bell sound file
+            
+            // Check if bell sound is available
+            let bellSound;
+            try {
+                bellSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+            } catch (e) {
+                console.error("Audio playback not supported or file not found.");
+            }
+
+            function showModal(modalElement) {
+                modalElement.classList.remove('hidden');
+                modalElement.classList.add('active');
+            }
+
+            function hideModal(modalElement) {
+                modalElement.classList.remove('active');
+                setTimeout(() => {
+                    modalElement.classList.add('hidden');
+                }, 300); // Match this with your CSS transition duration
+            }
 
             function generateOrderNumber() {
                 const prefix = "pokas-";
@@ -608,7 +627,7 @@
                     
                     document.getElementById('order-number').textContent = generateOrderNumber();
                     document.getElementById('delivery-date').textContent = getDeliveryDate();
-                    successModal.classList.remove('hidden');
+                    showModal(successModal);
 
                     setTimeout(() => {
                         window.location.href = "dashboard.html"; // Redirect to dashboard.html
@@ -623,12 +642,12 @@
                 // For demonstration, I'll just show it on page load
                 
                 // Show WhatsApp modal
-                whatsappModal.classList.remove('hidden');
+                showModal(whatsappModal);
             }
 
             closeWhatsappBtn.addEventListener('click', () => {
-                whatsappModal.classList.add('hidden');
-                trackingModal.classList.remove('hidden');
+                hideModal(whatsappModal);
+                showModal(trackingModal);
                 updateTrackingProgress();
             });
 
@@ -664,7 +683,9 @@
                         document.getElementById('tracking-line').style.width = `${percent}%`;
 
                         if (stage === 'received') {
-                            bellSound.play();
+                            if (bellSound) {
+                                bellSound.play();
+                            }
                             step.querySelector('i').classList.remove('text-red-500');
                             step.querySelector('i').classList.add('text-green-500');
                             return; // End the process
@@ -679,42 +700,47 @@
             }
 
             minimizeTrackingBtn.addEventListener('click', () => {
-                trackingModal.classList.add('hidden');
+                hideModal(trackingModal);
                 minimizedTrackingIcon.classList.remove('hidden');
             });
 
             minimizedTrackingIcon.addEventListener('click', () => {
-                trackingModal.classList.remove('hidden');
+                showModal(trackingModal);
                 minimizedTrackingIcon.classList.add('hidden');
             });
 
             customerCareBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const type = e.currentTarget.dataset.type;
-                    document.getElementById(`${type}-modal`).classList.remove('hidden');
+                    const modal = document.getElementById(`${type}-modal`);
+                    showModal(modal);
                 });
             });
 
             closeModals.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    e.target.closest('.fixed').classList.add('hidden');
+                    const modal = e.target.closest('.modal-overlay');
+                    hideModal(modal);
                 });
             });
         });
     </script>
-      <Style>
-        .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
+       <style>
+        .modal-overlay {
+            transition: opacity 0.3s ease;
         }
         .modal-content {
+            transition: transform 0.3s ease, opacity 0.3s ease;
             transform: scale(0.95);
+            opacity: 0;
         }
-        .modal.active {
+        .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
-        .modal.active .modal-content {
+        .modal-overlay.active .modal-content {
             transform: scale(1);
+            opacity: 1;
         }
 
         /* Tracking step styles */
