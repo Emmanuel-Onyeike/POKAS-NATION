@@ -34,6 +34,7 @@ const handleRegister = async (event) => {
         return;
     }
 
+    // Step 1: Register the user with Supabase Authentication and get a session
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -46,6 +47,7 @@ const handleRegister = async (event) => {
         return;
     }
 
+    // Step 2: Insert the additional profile data into the 'profiles' table
     const userId = authData.user.id;
     const { error: profileError } = await supabase
         .from('profiles')
@@ -63,9 +65,11 @@ const handleRegister = async (event) => {
         return;
     }
 
-    registerMessage.textContent = 'Registration successful! Check your email to confirm.';
+    // Redirect to the dashboard immediately after successful registration
+    registerMessage.textContent = 'Registration successful! Redirecting...';
     registerMessage.classList.remove('hidden');
     registerMessage.classList.add('text-green-500');
+    window.location.href = 'dashboard.html';
 };
 
 // Function to handle login
@@ -91,6 +95,7 @@ const handleLogin = async (event) => {
         loginMessage.classList.remove('hidden');
         loginMessage.classList.add('text-red-500');
     } else {
+        // Redirect to the dashboard after a successful login
         loginMessage.textContent = 'Login successful! Redirecting...';
         loginMessage.classList.remove('hidden');
         loginMessage.classList.add('text-green-500');
@@ -104,7 +109,6 @@ const handleLogout = async () => {
     if (error) {
         console.error('Error logging out:', error.message);
     } else {
-        // Clear any local storage data and redirect to the login page
         localStorage.removeItem("profilePicture");
         window.location.href = 'login.html';
     }
@@ -117,25 +121,21 @@ const profilePic = document.getElementById('profile-picture');
 const profilePicInput = document.getElementById('profile-picture-input');
 const profileDetailsEmail = document.getElementById('profile-details-email');
 const profileDetailsUsername = document.getElementById('profile-details-username');
-const profileDetailsAddress = document.getElementById('profile-details-address'); // This will still show 'Not set' as you don't have this field in your DB yet
+const profileDetailsAddress = document.getElementById('profile-details-address');
 
-// Function to fetch and display user profile information
 const fetchUserProfile = async () => {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-        // User not logged in, redirect to login page
         window.location.href = 'login.html';
         return;
     }
 
-    // Set email directly from the user object
     profileDetailsEmail.textContent = user.email || 'Not set';
 
-    // Fetch the rest of the profile data from the 'profiles' table
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username') // We are only selecting the username for now as that is the only field you have in the modal
+        .select('username')
         .eq('id', user.id)
         .single();
 
@@ -145,15 +145,13 @@ const fetchUserProfile = async () => {
     } else {
         profileDetailsUsername.textContent = profileData.username || 'Not set';
     }
-    
-    // Check if the user has a profile picture saved in local storage
+
     const savedPic = localStorage.getItem("profilePicture");
     if (savedPic) profilePic.src = savedPic;
 };
 
 // **Event Listeners**
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Login/Registration Forms ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
@@ -164,13 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.addEventListener('submit', handleRegister);
     }
 
-    // --- Dashboard & Profile Modal ---
-    const dashboardPage = document.querySelector('body'); // or a more specific element on your dashboard page
+    const dashboardPage = document.querySelector('body');
     if (dashboardPage && profileDetailsModal) {
-        // If we are on the dashboard page, fetch the profile data
         fetchUserProfile();
 
-        // Handle the profile picture upload
         profilePicInput.addEventListener("change", (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -179,17 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (event) => {
                 const newPic = event.target.result;
                 profilePic.src = newPic;
-                localStorage.setItem("profilePicture", newPic); // Save the image to local storage
+                localStorage.setItem("profilePicture", newPic);
             };
             reader.readAsDataURL(file);
         });
 
-        // Handle closing the profile modal
         closeProfileDetailsModal.addEventListener('click', () => {
             profileDetailsModal.classList.add('hidden');
         });
 
-        // Add a listener to open the modal (you'll need a button for this)
         const openModalBtn = document.getElementById('open-profile-modal-btn');
         if (openModalBtn) {
             openModalBtn.addEventListener('click', () => {
@@ -197,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Add a listener for the logout button (you'll need a button for this)
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', handleLogout);
