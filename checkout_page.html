@@ -386,12 +386,333 @@
     });
 </script>
 
-        <section id="summary-content" class="tab-content hidden">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-6">Order Summary</h2>
-            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-                <p>Review your order details, including items, costs, and chosen options.</p>
+          <section id="summary-content" class="tab-content">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Order Summary</h2>
+        <div class="space-y-6">
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="font-bold text-xl text-white mb-4">Your Order</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-gray-300">
+                        <span class="font-semibold">Subtotal</span>
+                        <span id="summary-subtotal-amount" class="font-bold">N25,000.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-gray-300">
+                        <span class="font-semibold">Shipping Fee</span>
+                        <span id="summary-shipping-fee-amount" class="font-bold">N2,000.00</span>
+                    </div>
+                    <div class="border-t border-gray-700 pt-4 flex justify-between items-center">
+                        <span class="text-lg font-bold text-white">Total</span>
+                        <span id="summary-total-amount" class="text-lg font-bold text-red-500">N27,000.00</span>
+                    </div>
+                </div>
             </div>
-        </section>
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div>
+                    <h3 class="font-bold text-xl text-white mb-2">Delivery Address</h3>
+                    <p id="summary-address" class="text-gray-300">123 Main Street, Victoria Island, Lagos, Nigeria</p>
+                </div>
+                <div class="mt-4 sm:mt-0 space-x-2">
+                    <button id="change-address-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Change</button>
+                    <button id="save-address-btn" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Save</button>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="font-bold text-xl text-white mb-2">Delivery Method</h3>
+                <p id="summary-delivery-method" class="text-gray-300">Pay on Delivery</p>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                <h3 class="font-bold text-xl text-white mb-4">Items in Order</h3>
+                <div id="summary-products-list" class="space-y-4">
+                    <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                        <img src="https://via.placeholder.com/60" alt="Product Image" class="w-16 h-16 rounded-lg object-cover">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white">Stylish T-Shirt</h4>
+                            <p class="text-sm text-gray-400">Color: Black | Size: M</p>
+                        </div>
+                        <span class="font-bold text-lg text-white">N15,000.00</span>
+                    </div>
+                    <div class="flex items-center space-x-4 border-b border-gray-700 pb-4">
+                        <img src="https://via.placeholder.com/60" alt="Product Image" class="w-16 h-16 rounded-lg object-cover">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-white">Running Shoes</h4>
+                            <p class="text-sm text-gray-400">Color: Grey | Size: 42</p>
+                        </div>
+                        <span class="font-bold text-lg text-white">N10,000.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <button id="confirm-order-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg">
+                    Confirm Order
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div id="loading-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+        <i class="fas fa-spinner fa-spin text-red-500 text-6xl"></i>
+    </div>
+
+    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+        <div class="modal-content bg-gradient-to-br from-green-600 via-green-700 to-green-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-sm mx-4 text-center">
+            <i class="fas fa-check-circle text-6xl mb-4 text-white"></i>
+            <h3 class="text-2xl font-extrabold mb-2">Order Confirmed!</h3>
+            <p class="text-sm text-gray-200">Your order has been placed successfully.</p>
+            <div class="bg-green-800 p-4 rounded-xl mt-4">
+                <p class="text-sm font-semibold text-gray-100">Order Number:</p>
+                <p id="order-number" class="text-lg font-bold text-white tracking-wider">pokas-924004939fw0204929</p>
+            </div>
+            <p class="text-xs text-gray-300 mt-2">Estimated delivery: <span id="delivery-date" class="font-semibold"></span></p>
+        </div>
+    </div>
+
+    <div id="whatsapp-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+        <div class="modal-content relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-md mx-4 text-center">
+            <button id="close-whatsapp-modal" class="absolute top-5 right-5 text-gray-200 hover:text-white transition-colors text-2xl" aria-label="Close WhatsApp modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <i class="fab fa-whatsapp text-6xl text-white mb-4"></i>
+            <h3 class="text-2xl font-extrabold mb-2">WhatsApp Confirmation</h3>
+            <p class="text-base text-gray-100 mb-4">
+                To finalize your order, please send a message to our customer service with your order details.
+            </p>
+            <div class="bg-teal-900 p-4 rounded-xl mb-4">
+                <p class="text-sm text-gray-200 font-semibold">Our WhatsApp Number:</p>
+                <a href="https://wa.me/2348012345678" target="_blank" class="text-xl font-bold text-white tracking-wide hover:underline transition-colors">+234 801 234 5678</a>
+            </div>
+            <p class="text-xs text-gray-200">
+                Please include a screenshot of your order confirmation for faster service.
+            </p>
+        </div>
+    </div>
+
+    <div id="tracking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
+        <div class="modal-content relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4">
+            <button id="minimize-tracking-modal" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors text-2xl" aria-label="Minimize tracking modal">
+                <i class="fas fa-window-minimize"></i>
+            </button>
+            
+            <h3 class="text-2xl font-extrabold mb-6 text-center">Track Your Order</h3>
+
+            <div class="flex items-center justify-between mb-8 relative">
+                <div class="flex-1 h-1 bg-gray-700 absolute top-1/2 left-0 right-0 z-0"></div>
+                <div id="tracking-line" class="absolute top-1/2 left-0 h-1 bg-red-600 z-10 transition-all duration-1000 ease-in-out"></div>
+                
+                <div class="relative tracking-step text-center z-20" data-stage="ordered">
+                    <i class="fas fa-clipboard-list text-3xl text-gray-500 mb-2"></i>
+                    <p class="text-xs text-gray-400">Ordered</p>
+                </div>
+                <div class="relative tracking-step text-center z-20" data-stage="packing">
+                    <i class="fas fa-box-open text-3xl text-gray-500 mb-2"></i>
+                    <p class="text-xs text-gray-400">Packing</p>
+                </div>
+                <div class="relative tracking-step text-center z-20" data-stage="on-the-road">
+                    <i class="fas fa-truck text-3xl text-gray-500 mb-2"></i>
+                    <p class="text-xs text-gray-400">On the Road</p>
+                </div>
+                <div class="relative tracking-step text-center z-20" data-stage="nearest-station">
+                    <i class="fas fa-map-marker-alt text-3xl text-gray-500 mb-2"></i>
+                    <p class="text-xs text-gray-400">Nearest Station</p>
+                </div>
+                <div class="relative tracking-step text-center z-20" data-stage="received">
+                    <i class="fas fa-home text-3xl text-gray-500 mb-2"></i>
+                    <p class="text-xs text-gray-400">Received</p>
+                </div>
+            </div>
+
+            <p class="text-sm text-center text-gray-400 mb-6">
+                Your package is currently being <span id="current-tracking-stage" class="font-bold text-red-500">processed</span>.
+            </p>
+
+            <hr class="border-gray-700 mb-6">
+
+            <div class="flex justify-around items-center space-x-4">
+                <button class="customer-care-btn text-center" data-type="email">
+                    <i class="fas fa-envelope text-2xl text-red-500 mb-1"></i>
+                    <p class="text-xs text-gray-400">Email Us</p>
+                </button>
+                <button class="customer-care-btn text-center" data-type="call">
+                    <i class="fas fa-phone-alt text-2xl text-red-500 mb-1"></i>
+                    <p class="text-xs text-gray-400">Call Us</p>
+                </button>
+                <button class="customer-care-btn text-center" data-type="chat">
+                    <i class="fab fa-whatsapp text-2xl text-red-500 mb-1"></i>
+                    <p class="text-xs text-gray-400">Chat with Us</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="minimized-tracking-icon" class="hidden fixed bottom-8 right-8 z-50 p-4 bg-red-600 rounded-full shadow-lg cursor-pointer hover:bg-red-700 transition-colors">
+        <i class="fas fa-truck text-white text-2xl"></i>
+    </div>
+
+    <div id="email-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
+            <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            <h3 class="font-bold text-xl text-white mb-4">Email Support</h3>
+            <p class="text-gray-300">Email us at: <a href="mailto:support@yourcompany.com" class="text-red-500 hover:underline">support@yourcompany.com</a></p>
+        </div>
+    </div>
+    <div id="call-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
+            <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            <h3 class="font-bold text-xl text-white mb-4">Call Us</h3>
+            <p class="text-gray-300">Call our helpline: <a href="tel:+2348012345678" class="text-red-500 hover:underline">+234 801 234 5678</a></p>
+        </div>
+    </div>
+    <div id="chat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+        <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
+            <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            <h3 class="font-bold text-xl text-white mb-4">Chat Support</h3>
+            <p class="text-gray-300">Chat with us on WhatsApp: <a href="https://wa.me/2348012345678" target="_blank" class="text-red-500 hover:underline">+234 801 234 5678</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const confirmBtn = document.getElementById('confirm-order-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const successModal = document.getElementById('success-modal');
+            const whatsappModal = document.getElementById('whatsapp-modal');
+            const closeWhatsappBtn = document.getElementById('close-whatsapp-modal');
+            const trackingModal = document.getElementById('tracking-modal');
+            const minimizeTrackingBtn = document.getElementById('minimize-tracking-modal');
+            const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
+            const customerCareBtns = document.querySelectorAll('.customer-care-btn');
+            const closeModals = document.querySelectorAll('.close-modal');
+
+            function generateOrderNumber() {
+                const prefix = "pokas-";
+                const randomPart = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                return prefix + randomPart.substring(0, 20);
+            }
+
+            function getDeliveryDate() {
+                const date = new Date();
+                date.setDate(date.getDate() + 2);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+
+            confirmBtn.addEventListener('click', () => {
+                loadingOverlay.classList.remove('hidden');
+
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                    
+                    document.getElementById('order-number').textContent = generateOrderNumber();
+                    document.getElementById('delivery-date').textContent = getDeliveryDate();
+                    successModal.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        successModal.classList.add('hidden');
+                        whatsappModal.classList.remove('hidden');
+                    }, 3000); // 3 seconds
+                }, 5000); // 5 seconds
+            });
+
+            closeWhatsappBtn.addEventListener('click', () => {
+                whatsappModal.classList.add('hidden');
+                trackingModal.classList.remove('hidden');
+                updateTrackingProgress();
+            });
+
+            let trackingInterval;
+            function updateTrackingProgress() {
+                const stages = ['ordered', 'packing', 'on-the-road', 'nearest-station', 'received'];
+                const stageNames = {
+                    'ordered': 'Order Confirmed',
+                    'packing': 'Packaging',
+                    'on-the-road': 'On The Road',
+                    'nearest-station': 'At Nearest Station',
+                    'received': 'Delivered'
+                };
+                const steps = document.querySelectorAll('.tracking-step');
+
+                let currentStepIndex = 0;
+                trackingInterval = setInterval(() => {
+                    if (currentStepIndex < stages.length) {
+                        const stage = stages[currentStepIndex];
+                        const step = document.querySelector(`[data-stage="${stage}"]`);
+                        
+                        step.querySelector('i').classList.remove('text-gray-500');
+                        step.querySelector('i').classList.add('text-red-500');
+                        step.querySelector('p').classList.remove('text-gray-400');
+                        step.querySelector('p').classList.add('text-white');
+                        document.getElementById('current-tracking-stage').textContent = stageNames[stage];
+
+                        const percent = (currentStepIndex / (stages.length - 1)) * 100;
+                        document.getElementById('tracking-line').style.width = `${percent}%`;
+
+                        if (currentStepIndex === stages.length - 1) {
+                            clearInterval(trackingInterval);
+                            setTimeout(() => {
+                                steps.forEach(s => {
+                                    s.querySelector('i').classList.remove('text-red-500');
+                                    s.querySelector('i').classList.add('text-green-500');
+                                });
+                                document.getElementById('current-tracking-stage').textContent = 'Received';
+                            }, 2000); // Wait 2 seconds before final color change for effect
+                        } else {
+                            currentStepIndex++;
+                        }
+                    }
+                }, 1000); // 1-second interval for demonstration
+            }
+
+            minimizeTrackingBtn.addEventListener('click', () => {
+                trackingModal.classList.add('hidden');
+                minimizedTrackingIcon.classList.remove('hidden');
+            });
+
+            minimizedTrackingIcon.addEventListener('click', () => {
+                trackingModal.classList.remove('hidden');
+                minimizedTrackingIcon.classList.add('hidden');
+            });
+
+            customerCareBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const type = e.currentTarget.dataset.type;
+                    document.getElementById(`${type}-modal`).classList.remove('hidden');
+                });
+            });
+
+            closeModals.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.fixed').classList.add('hidden');
+                });
+            });
+        });
+    </script>
+       <style>
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content {
+            transform: scale(0.95);
+        }
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Tracking step styles */
+        .tracking-step i {
+            transition: color 0.5s ease;
+        }
+        .tracking-step p {
+            transition: color 0.5s ease;
+        }
+    </style>
     </main>
 
     <script>
