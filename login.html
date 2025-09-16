@@ -6,6 +6,7 @@
     <title>Pokas Nation - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="/WhatsApp Image 2025-08-21 at 00.21.37.jpeg" type="image/x-icon" />
+    <!-- Ensure the favicon image exists in the root directory -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-black flex items-center justify-center min-h-screen">
@@ -18,30 +19,79 @@
                 <label for="login-email" class="block text-gray-300 mb-1">Email</label>
                 <div class="flex items-center bg-neutral-800 rounded-lg px-3">
                     <i class="fa fa-envelope text-red-800 mr-2"></i>
-                    <input type="email" id="login-email" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter your email" required>
+                    <input 
+                        type="email" 
+                        id="login-email" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter your email" 
+                        required 
+                        aria-describedby="login-message"
+                    >
                 </div>
             </div>
 
             <div>
                 <label for="login-password" class="block text-gray-300 mb-1">Password</label>
-                <div class="flex items-center bg-neutral-800 rounded-lg px-3">
+                <div class="flex items-center bg-neutral-800 rounded-lg px-3 relative">
                     <i class="fa fa-lock text-red-800 mr-2"></i>
-                    <input type="password" id="login-password" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter your password" required>
+                    <input 
+                        type="password" 
+                        id="login-password" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter your password" 
+                        required 
+                        aria-describedby="login-message"
+                    >
+                    <button 
+                        type="button" 
+                        id="toggle-password" 
+                        class="absolute right-3 text-gray-400 hover:text-white"
+                        aria-label="Toggle password visibility"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
 
             <div id="login-message" class="text-center text-sm font-semibold mt-4 hidden"></div>
 
-            <button type="submit" id="login-btn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition text-center block">
-                Login
+            <button 
+                type="submit" 
+                id="login-btn" 
+                class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition text-center block disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span id="login-btn-text">Login</span>
+                <span id="login-btn-loading" class="hidden">
+                    <i class="fas fa-spinner fa-spin"></i> Logging in...
+                </span>
             </button>
         </form>
 
-        <p class="text-gray-400 text-center mt-6">Don’t have an account?
+        <p class="text-gray-400 text-center mt-6">
+            Don’t have an account? 
             <a href="register.html" class="text-red-500 hover:underline">Register</a>
+            <br>
+            Forgot your password? 
+            <a href="reset-password.html" class="text-red-500 hover:underline">Reset Password</a>
         </p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
+    <script>
+        // Password visibility toggle
+        document.getElementById('toggle-password')?.addEventListener('click', () => {
+            const passwordInput = document.getElementById('login-password');
+            const toggleIcon = document.getElementById('toggle-password').querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 </body>
 </html>
