@@ -478,11 +478,11 @@
             <i class="fab fa-whatsapp text-6xl text-white mb-4"></i>
             <h3 class="text-2xl font-extrabold mb-2">WhatsApp Confirmation</h3>
             <p class="text-base text-gray-100 mb-4">
-                To finalize your order, please send a message to our customer service with your order details.
+                To finalize your order, please send us a message with your order details.
             </p>
             <div class="bg-teal-900 p-4 rounded-xl mb-4">
                 <p class="text-sm text-gray-200 font-semibold">Our WhatsApp Number:</p>
-                <a href="https://wa.me/2348012345678" target="_blank" class="text-xl font-bold text-white tracking-wide hover:underline transition-colors">+234 801 234 5678</a>
+                <a href="https://wa.me/+234 816 410 7147" target="_blank" class="text-xl font-bold text-white tracking-wide hover:underline transition-colors">+234 801 234 5678</a>
             </div>
             <p class="text-xs text-gray-200">
                 Please include a screenshot of your order confirmation for faster service.
@@ -490,66 +490,106 @@
         </div>
     </div>
 
-    <div id="tracking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
-        <div class="modal-content relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4">
-            <button id="minimize-tracking-modal" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors text-2xl" aria-label="Minimize tracking modal">
-                <i class="fas fa-window-minimize"></i>
-            </button>
-            
-            <h3 class="text-2xl font-extrabold mb-6 text-center">Track Your Order</h3>
+  <div id="tracking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity duration-300">
+  <div class="modal-content relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-2xl mx-4">
 
-            <div class="flex items-center justify-between mb-8 relative">
-                <div class="flex-1 h-1 bg-gray-700 absolute top-1/2 left-0 right-0 z-0"></div>
-                <div id="tracking-line" class="absolute top-1/2 left-0 h-1 bg-red-600 z-10 transition-all duration-1000 ease-in-out"></div>
-                
-                <div class="relative tracking-step text-center z-20" data-stage="ordered">
-                    <i class="fas fa-clipboard-list text-3xl text-gray-500 mb-2"></i>
-                    <p class="text-xs text-gray-400">Ordered</p>
-                </div>
-                <div class="relative tracking-step text-center z-20" data-stage="packing">
-                    <i class="fas fa-box-open text-3xl text-gray-500 mb-2"></i>
-                    <p class="text-xs text-gray-400">Packing</p>
-                </div>
-                <div class="relative tracking-step text-center z-20" data-stage="on-the-road">
-                    <i class="fas fa-truck text-3xl text-gray-500 mb-2"></i>
-                    <p class="text-xs text-gray-400">On the Road</p>
-                </div>
-                <div class="relative tracking-step text-center z-20" data-stage="nearest-station">
-                    <i class="fas fa-map-marker-alt text-3xl text-gray-500 mb-2"></i>
-                    <p class="text-xs text-gray-400">Nearest Station</p>
-                </div>
-                <div class="relative tracking-step text-center z-20" data-stage="received">
-                    <i class="fas fa-home text-3xl text-gray-500 mb-2"></i>
-                    <p class="text-xs text-gray-400">Received</p>
-                </div>
-            </div>
+    <!-- Minimize Button -->
+    <button id="minimize-tracking-modal" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors text-2xl" aria-label="Minimize tracking modal">
+      <i class="fas fa-window-minimize"></i>
+    </button>
 
-            <p class="text-sm text-center text-gray-400 mb-6">
-                Your package is currently being <span id="current-tracking-stage" class="font-bold text-red-500">processed</span>.
-            </p>
+    <!-- Header -->
+    <h3 class="text-3xl font-extrabold mb-8 text-center tracking-wide">📦 Track Your Order</h3>
 
-            <hr class="border-gray-700 mb-6">
+    <!-- Progress Steps -->
+    <div class="relative flex justify-between items-center mb-10">
+      <!-- Base Line -->
+      <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-700 rounded-full z-0"></div>
+      <!-- Active Line -->
+      <div id="tracking-line" class="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-red-500 to-red-600 rounded-full z-10 transition-all duration-1000 ease-in-out"></div>
 
-            <div class="flex justify-around items-center space-x-4">
-                <button class="customer-care-btn text-center" data-type="email">
-                    <i class="fas fa-envelope text-2xl text-red-500 mb-1"></i>
-                    <p class="text-xs text-gray-400">Email Us</p>
-                </button>
-                <button class="customer-care-btn text-center" data-type="call">
-                    <i class="fas fa-phone-alt text-2xl text-red-500 mb-1"></i>
-                    <p class="text-xs text-gray-400">Call Us</p>
-                </button>
-                <button class="customer-care-btn text-center" data-type="chat">
-                    <i class="fab fa-whatsapp text-2xl text-red-500 mb-1"></i>
-                    <p class="text-xs text-gray-400">Chat with Us</p>
-                </button>
-            </div>
+      <!-- Steps -->
+      <div class="relative tracking-step flex flex-col items-center z-20" data-stage="ordered">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 border-2 border-gray-600">
+          <i class="fas fa-clipboard-list text-xl text-gray-500"></i>
         </div>
+        <p class="mt-2 text-xs text-gray-400 font-medium">Ordered</p>
+      </div>
+
+      <div class="relative tracking-step flex flex-col items-center z-20" data-stage="packing">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 border-2 border-gray-600">
+          <i class="fas fa-box-open text-xl text-gray-500"></i>
+        </div>
+        <p class="mt-2 text-xs text-gray-400 font-medium">Packing</p>
+      </div>
+
+      <div class="relative tracking-step flex flex-col items-center z-20" data-stage="on-the-road">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 border-2 border-gray-600">
+          <i class="fas fa-truck text-xl text-gray-500"></i>
+        </div>
+        <p class="mt-2 text-xs text-gray-400 font-medium">On the Road</p>
+      </div>
+
+      <div class="relative tracking-step flex flex-col items-center z-20" data-stage="nearest-station">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 border-2 border-gray-600">
+          <i class="fas fa-map-marker-alt text-xl text-gray-500"></i>
+        </div>
+        <p class="mt-2 text-xs text-gray-400 font-medium">Nearest Station</p>
+      </div>
+
+      <div class="relative tracking-step flex flex-col items-center z-20" data-stage="received">
+        <div class="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 border-2 border-gray-600">
+          <i class="fas fa-home text-xl text-gray-500"></i>
+        </div>
+        <p class="mt-2 text-xs text-gray-400 font-medium">Received</p>
+      </div>
     </div>
 
-    <div id="minimized-tracking-icon" class="hidden fixed bottom-8 right-8 z-50 p-4 bg-red-600 rounded-full shadow-lg cursor-pointer hover:bg-red-700 transition-colors">
-        <i class="fas fa-truck text-white text-2xl"></i>
+    <!-- Status -->
+    <p class="text-center text-sm text-gray-300 mb-6">
+      Status: <span id="current-tracking-stage" class="font-bold text-red-500">Processing...</span>
+    </p>
+
+    <hr class="border-gray-700 mb-6">
+
+    <!-- Contact Buttons -->
+    <div class="flex justify-center gap-6 flex-wrap">
+      <button class="customer-care-btn flex flex-col items-center p-4 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors w-24" data-type="email">
+        <i class="fas fa-envelope text-2xl text-red-500 mb-2"></i>
+        <p class="text-xs text-gray-300">Email</p>
+      </button>
+      <button class="customer-care-btn flex flex-col items-center p-4 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors w-24" data-type="call">
+        <i class="fas fa-phone-alt text-2xl text-red-500 mb-2"></i>
+        <p class="text-xs text-gray-300">Call</p>
+      </button>
+      <button class="customer-care-btn flex flex-col items-center p-4 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors w-24" data-type="chat">
+        <i class="fab fa-whatsapp text-2xl text-red-500 mb-2"></i>
+        <p class="text-xs text-gray-300">Chat</p>
+      </button>
     </div>
+  </div>
+</div>
+
+<!-- Floating Icon -->
+<div id="minimized-tracking-icon" class="hidden fixed bottom-8 right-8 z-50 p-5 bg-gradient-to-r from-red-600 to-red-700 rounded-full shadow-xl cursor-pointer hover:scale-110 transform transition duration-300">
+  <i class="fas fa-truck text-white text-2xl animate-bounce"></i>
+</div>
+
+<style>
+  .tracking-step.active div {
+    border-color: #ef4444; /* Tailwind red-500 */
+    background: #1f2937; /* gray-800 */
+  }
+  .tracking-step.active i {
+    color: #ef4444;
+  }
+  .tracking-step.completed div {
+    border-color: #22c55e; /* green-500 */
+  }
+  .tracking-step.completed i {
+    color: #22c55e;
+  }
+</style>
 
     <div id="email-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
