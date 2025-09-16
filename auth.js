@@ -1,9 +1,8 @@
 // **Supabase Initialization**
-// Replace with your actual Supabase project URL and anon public key
 const SUPABASE_URL = 'https://bhqnwueocaobybbrinwf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJocW53dWVvY2FvYnliYnJpbndmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5ODA3MDAsImV4cCI6MjA3MzU1NjcwMH0.LQ9U5eblqrA4wCGXk1v3PHCmb1NPE7kdGJHeT1CmEhI';
 
-// Initialize Supabase client (fixed capitalization)
+// Initialize Supabase client
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // **Authentication Functions**
@@ -19,14 +18,22 @@ const handleRegister = async (event) => {
     const confirmPasswordInput = document.getElementById('confirm-password');
     const registerMessage = document.getElementById('register-message');
 
-    const fullName = fullNameInput.value;
-    const email = emailInput.value;
-    const username = usernameInput.value;
-    const phoneNumber = phoneNumberInput.value;
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
+    const fullName = fullNameInput?.value;
+    const email = emailInput?.value;
+    let username = usernameInput?.value;
+    const phoneNumber = phoneNumberInput?.value;
+    const password = passwordInput?.value;
+    const confirmPassword = confirmPasswordInput?.value;
+
+    if (!registerMessage) return;
 
     registerMessage.classList.add('hidden');
+
+    // Generate unique default username if none provided
+    if (!username) {
+        const randomId = Math.random().toString(36).substring(2, 8); // 6-char random string
+        username = `user_${randomId}`; // e.g., user_abc123
+    }
 
     // Validate passwords match
     if (password !== confirmPassword) {
@@ -36,7 +43,7 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Validate password length (optional improvement)
+    // Validate password length
     if (password.length < 6) {
         registerMessage.textContent = 'Error: Password must be at least 6 characters!';
         registerMessage.classList.remove('hidden');
@@ -66,8 +73,6 @@ const handleRegister = async (event) => {
             full_name: fullName,
             username: username,
             phone_number: phoneNumber,
-            // Add address if you include it in the table
-            // address: '' // Uncomment and add input if needed
         }]);
 
     if (profileError) {
@@ -77,12 +82,10 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Show success and redirect (or prompt for email confirmation)
+    // Show success (email confirmation required by default)
     registerMessage.textContent = 'Registration successful! Check your email to confirm.';
     registerMessage.classList.remove('hidden');
     registerMessage.classList.add('text-green-500');
-    // Comment out immediate redirect if email confirmation is required
-    // window.location.href = 'dashboard.html';
 };
 
 // Handle login
@@ -93,8 +96,10 @@ const handleLogin = async (event) => {
     const passwordInput = document.getElementById('login-password');
     const loginMessage = document.getElementById('login-message');
 
-    const email = emailInput.value;
-    const password = passwordInput.value;
+    const email = emailInput?.value;
+    const password = passwordInput?.value;
+
+    if (!loginMessage) return;
 
     loginMessage.classList.add('hidden');
 
@@ -145,7 +150,7 @@ const fetchUserProfile = async () => {
 
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username, address') // Add address if column exists
+        .select('username') // Removed address since it's not in the insert
         .eq('id', user.id)
         .single();
 
@@ -155,14 +160,14 @@ const fetchUserProfile = async () => {
             profileDetailsUsername.textContent = 'Error loading';
         }
         if (profileDetailsAddress) {
-            profileDetailsAddress.textContent = 'Error loading';
+            profileDetailsAddress.textContent = 'Not set';
         }
     } else {
         if (profileDetailsUsername) {
             profileDetailsUsername.textContent = profileData.username || 'Not set';
         }
         if (profileDetailsAddress) {
-            profileDetailsAddress.textContent = profileData.address || 'Not set';
+            profileDetailsAddress.textContent = 'Not set';
         }
     }
 
@@ -193,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchUserProfile();
 
         if (profilePicInput) {
-            profilePicInput.addEventListener("change", (e) => {
+            profilePicInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
 
@@ -203,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const profilePic = document.getElementById('profile-picture');
                     if (profilePic) {
                         profilePic.src = newPic;
-                        localStorage.setItem("profilePicture", newPic);
+                        localStorage.setItem('profilePicture', newPic);
                     }
                 };
                 reader.readAsDataURL(file);
