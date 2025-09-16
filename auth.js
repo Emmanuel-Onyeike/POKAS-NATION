@@ -3,10 +3,11 @@
 const SUPABASE_URL = 'https://bhqnwueocaobybbrinwf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJocW53dWVvY2FvYnliYnJpbndmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5ODA3MDAsImV4cCI6MjA3MzU1NjcwMH0.LQ9U5eblqrA4wCGXk1v3PHCmb1NPE7kdGJHeT1CmEhI';
 
-const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Initialize Supabase client (fixed capitalization)
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // **Authentication Functions**
-// Function to handle registration
+// Handle registration
 const handleRegister = async (event) => {
     event.preventDefault();
 
@@ -27,6 +28,7 @@ const handleRegister = async (event) => {
 
     registerMessage.classList.add('hidden');
 
+    // Validate passwords match
     if (password !== confirmPassword) {
         registerMessage.textContent = 'Error: Passwords do not match!';
         registerMessage.classList.remove('hidden');
@@ -34,7 +36,15 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Step 1: Register the user with Supabase Authentication and get a session
+    // Validate password length (optional improvement)
+    if (password.length < 6) {
+        registerMessage.textContent = 'Error: Password must be at least 6 characters!';
+        registerMessage.classList.remove('hidden');
+        registerMessage.classList.add('text-red-500');
+        return;
+    }
+
+    // Step 1: Register user with Supabase Authentication
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -47,7 +57,7 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Step 2: Insert the additional profile data into the 'profiles' table
+    // Step 2: Insert profile data into 'profiles' table
     const userId = authData.user.id;
     const { error: profileError } = await supabase
         .from('profiles')
@@ -55,7 +65,9 @@ const handleRegister = async (event) => {
             id: userId,
             full_name: fullName,
             username: username,
-            phone_number: phoneNumber
+            phone_number: phoneNumber,
+            // Add address if you include it in the table
+            // address: '' // Uncomment and add input if needed
         }]);
 
     if (profileError) {
@@ -65,14 +77,15 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Redirect to the dashboard immediately after successful registration
-    registerMessage.textContent = 'Registration successful! Redirecting...';
+    // Show success and redirect (or prompt for email confirmation)
+    registerMessage.textContent = 'Registration successful! Check your email to confirm.';
     registerMessage.classList.remove('hidden');
     registerMessage.classList.add('text-green-500');
-    window.location.href = 'dashboard.html';
+    // Comment out immediate redirect if email confirmation is required
+    // window.location.href = 'dashboard.html';
 };
 
-// Function to handle login
+// Handle login
 const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -95,7 +108,6 @@ const handleLogin = async (event) => {
         loginMessage.classList.remove('hidden');
         loginMessage.classList.add('text-red-500');
     } else {
-        // Redirect to the dashboard after a successful login
         loginMessage.textContent = 'Login successful! Redirecting...';
         loginMessage.classList.remove('hidden');
         loginMessage.classList.add('text-green-500');
@@ -103,7 +115,7 @@ const handleLogin = async (event) => {
     }
 };
 
-// Function to handle logout
+// Handle logout
 const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
@@ -115,14 +127,6 @@ const handleLogout = async () => {
 };
 
 // **Profile Modal & Data Functions**
-const profileDetailsModal = document.getElementById('profile-details-modal');
-const closeProfileDetailsModal = document.getElementById('close-profile-details-modal');
-const profilePic = document.getElementById('profile-picture');
-const profilePicInput = document.getElementById('profile-picture-input');
-const profileDetailsEmail = document.getElementById('profile-details-email');
-const profileDetailsUsername = document.getElementById('profile-details-username');
-const profileDetailsAddress = document.getElementById('profile-details-address');
-
 const fetchUserProfile = async () => {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -131,23 +135,42 @@ const fetchUserProfile = async () => {
         return;
     }
 
-    profileDetailsEmail.textContent = user.email || 'Not set';
+    const profileDetailsEmail = document.getElementById('profile-details-email');
+    const profileDetailsUsername = document.getElementById('profile-details-username');
+    const profileDetailsAddress = document.getElementById('profile-details-address');
+
+    if (profileDetailsEmail) {
+        profileDetailsEmail.textContent = user.email || 'Not set';
+    }
 
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('username')
+        .select('username, address') // Add address if column exists
         .eq('id', user.id)
         .single();
 
     if (profileError) {
         console.error('Error fetching profile data:', profileError.message);
-        profileDetailsUsername.textContent = 'Error loading';
+        if (profileDetailsUsername) {
+            profileDetailsUsername.textContent = 'Error loading';
+        }
+        if (profileDetailsAddress) {
+            profileDetailsAddress.textContent = 'Error loading';
+        }
     } else {
-        profileDetailsUsername.textContent = profileData.username || 'Not set';
+        if (profileDetailsUsername) {
+            profileDetailsUsername.textContent = profileData.username || 'Not set';
+        }
+        if (profileDetailsAddress) {
+            profileDetailsAddress.textContent = profileData.address || 'Not set';
+        }
     }
 
-    const savedPic = localStorage.getItem("profilePicture");
-    if (savedPic) profilePic.src = savedPic;
+    const profilePic = document.getElementById('profile-picture');
+    if (profilePic) {
+        const savedPic = localStorage.getItem("profilePicture");
+        if (savedPic) profilePic.src = savedPic;
+    }
 };
 
 // **Event Listeners**
@@ -162,26 +185,36 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.addEventListener('submit', handleRegister);
     }
 
-    const dashboardPage = document.querySelector('body');
-    if (dashboardPage && profileDetailsModal) {
+    const profileDetailsModal = document.getElementById('profile-details-modal');
+    const profilePicInput = document.getElementById('profile-picture-input');
+    const closeProfileDetailsModal = document.getElementById('close-profile-details-modal');
+
+    if (profileDetailsModal) {
         fetchUserProfile();
 
-        profilePicInput.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
+        if (profilePicInput) {
+            profilePicInput.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const newPic = event.target.result;
-                profilePic.src = newPic;
-                localStorage.setItem("profilePicture", newPic);
-            };
-            reader.readAsDataURL(file);
-        });
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const newPic = event.target.result;
+                    const profilePic = document.getElementById('profile-picture');
+                    if (profilePic) {
+                        profilePic.src = newPic;
+                        localStorage.setItem("profilePicture", newPic);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
 
-        closeProfileDetailsModal.addEventListener('click', () => {
-            profileDetailsModal.classList.add('hidden');
-        });
+        if (closeProfileDetailsModal) {
+            closeProfileDetailsModal.addEventListener('click', () => {
+                profileDetailsModal.classList.add('hidden');
+            });
+        }
 
         const openModalBtn = document.getElementById('open-profile-modal-btn');
         if (openModalBtn) {
