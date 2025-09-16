@@ -385,7 +385,7 @@
         });
     });
 </script>
- <section id="summary-content" class="tab-content">
+  <section id="summary-content" class="tab-content">
         <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Order Summary</h2>
         <div class="space-y-6">
 
@@ -447,7 +447,7 @@
 
             <div class="text-center mt-6">
                 <button id="confirm-order-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg">
-                    <i class="fas fa-shopping-cart"></i> Confirm Order
+                    Confirm Order
                 </button>
             </div>
         </div>
@@ -457,7 +457,7 @@
         <i class="fas fa-spinner fa-spin text-red-500 text-6xl"></i>
     </div>
 
-    <div id="success-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
         <div class="modal-content bg-gradient-to-br from-green-600 via-green-700 to-green-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-sm mx-4 text-center">
             <i class="fas fa-check-circle text-6xl mb-4 text-white"></i>
             <h3 class="text-2xl font-extrabold mb-2">Order Confirmed!</h3>
@@ -470,7 +470,7 @@
         </div>
     </div>
 
-    <div id="whatsapp-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="whatsapp-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
         <div class="modal-content relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white p-8 rounded-3xl shadow-2xl w-full max-w-md mx-4 text-center">
             <button id="close-whatsapp-modal" class="absolute top-5 right-5 text-gray-200 hover:text-white transition-colors text-2xl" aria-label="Close WhatsApp modal">
                 <i class="fas fa-times"></i>
@@ -490,7 +490,7 @@
         </div>
     </div>
 
-    <div id="tracking-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="tracking-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300">
         <div class="modal-content relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-8 rounded-3xl shadow-2xl w-full max-w-lg mx-4">
             <button id="minimize-tracking-modal" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors text-2xl" aria-label="Minimize tracking modal">
                 <i class="fas fa-window-minimize"></i>
@@ -551,21 +551,21 @@
         <i class="fas fa-truck text-white text-2xl"></i>
     </div>
 
-    <div id="email-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="email-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Email Support</h3>
             <p class="text-gray-300">Email us at: <a href="mailto:support@yourcompany.com" class="text-red-500 hover:underline">support@yourcompany.com</a></p>
         </div>
     </div>
-    <div id="call-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="call-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Call Us</h3>
             <p class="text-gray-300">Call our helpline: <a href="tel:+2348012345678" class="text-red-500 hover:underline">+234 801 234 5678</a></p>
         </div>
     </div>
-    <div id="chat-modal" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+    <div id="chat-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
         <div class="modal-content bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-sm mx-4 text-center relative">
             <button class="close-modal absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
             <h3 class="font-bold text-xl text-white mb-4">Chat Support</h3>
@@ -585,26 +585,6 @@
             const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
             const customerCareBtns = document.querySelectorAll('.customer-care-btn');
             const closeModals = document.querySelectorAll('.close-modal');
-            
-            // Check if bell sound is available
-            let bellSound;
-            try {
-                bellSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
-            } catch (e) {
-                console.error("Audio playback not supported or file not found.");
-            }
-
-            function showModal(modalElement) {
-                modalElement.classList.remove('hidden');
-                modalElement.classList.add('active');
-            }
-
-            function hideModal(modalElement) {
-                modalElement.classList.remove('active');
-                setTimeout(() => {
-                    modalElement.classList.add('hidden');
-                }, 300); // Match this with your CSS transition duration
-            }
 
             function generateOrderNumber() {
                 const prefix = "pokas-";
@@ -627,30 +607,22 @@
                     
                     document.getElementById('order-number').textContent = generateOrderNumber();
                     document.getElementById('delivery-date').textContent = getDeliveryDate();
-                    showModal(successModal);
+                    successModal.classList.remove('hidden');
 
                     setTimeout(() => {
-                        window.location.href = "dashboard.html"; // Redirect to dashboard.html
+                        successModal.classList.add('hidden');
+                        whatsappModal.classList.remove('hidden');
                     }, 3000); // 3 seconds
                 }, 5000); // 5 seconds
             });
 
-            // This part of the code would be on dashboard.html
-            // I'll simulate the modals opening on page load
-            if (window.location.pathname.endsWith('dashboard.html')) {
-                // If coming from the summary page, you might use a query parameter or localStorage to trigger this
-                // For demonstration, I'll just show it on page load
-                
-                // Show WhatsApp modal
-                showModal(whatsappModal);
-            }
-
             closeWhatsappBtn.addEventListener('click', () => {
-                hideModal(whatsappModal);
-                showModal(trackingModal);
+                whatsappModal.classList.add('hidden');
+                trackingModal.classList.remove('hidden');
                 updateTrackingProgress();
             });
 
+            let trackingInterval;
             function updateTrackingProgress() {
                 const stages = ['ordered', 'packing', 'on-the-road', 'nearest-station', 'received'];
                 const stageNames = {
@@ -660,15 +632,10 @@
                     'nearest-station': 'At Nearest Station',
                     'received': 'Delivered'
                 };
-                const stageDurations = {
-                    'ordered': 20000, // 20 seconds
-                    'packing': 20000, // 20 seconds
-                    'on-the-road': 20000, // 20 seconds
-                    'nearest-station': 1800000 // 30 minutes in milliseconds
-                };
+                const steps = document.querySelectorAll('.tracking-step');
+
                 let currentStepIndex = 0;
-                
-                const moveNextStage = () => {
+                trackingInterval = setInterval(() => {
                     if (currentStepIndex < stages.length) {
                         const stage = stages[currentStepIndex];
                         const step = document.querySelector(`[data-stage="${stage}"]`);
@@ -682,45 +649,42 @@
                         const percent = (currentStepIndex / (stages.length - 1)) * 100;
                         document.getElementById('tracking-line').style.width = `${percent}%`;
 
-                        if (stage === 'received') {
-                            if (bellSound) {
-                                bellSound.play();
-                            }
-                            step.querySelector('i').classList.remove('text-red-500');
-                            step.querySelector('i').classList.add('text-green-500');
-                            return; // End the process
+                        if (currentStepIndex === stages.length - 1) {
+                            clearInterval(trackingInterval);
+                            setTimeout(() => {
+                                steps.forEach(s => {
+                                    s.querySelector('i').classList.remove('text-red-500');
+                                    s.querySelector('i').classList.add('text-green-500');
+                                });
+                                document.getElementById('current-tracking-stage').textContent = 'Received';
+                            }, 2000); // Wait 2 seconds before final color change for effect
+                        } else {
+                            currentStepIndex++;
                         }
-
-                        currentStepIndex++;
-                        setTimeout(moveNextStage, stageDurations[stage]);
                     }
-                };
-
-                moveNextStage();
+                }, 1000); // 1-second interval for demonstration
             }
 
             minimizeTrackingBtn.addEventListener('click', () => {
-                hideModal(trackingModal);
+                trackingModal.classList.add('hidden');
                 minimizedTrackingIcon.classList.remove('hidden');
             });
 
             minimizedTrackingIcon.addEventListener('click', () => {
-                showModal(trackingModal);
+                trackingModal.classList.remove('hidden');
                 minimizedTrackingIcon.classList.add('hidden');
             });
 
             customerCareBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const type = e.currentTarget.dataset.type;
-                    const modal = document.getElementById(`${type}-modal`);
-                    showModal(modal);
+                    document.getElementById(`${type}-modal`).classList.remove('hidden');
                 });
             });
 
             closeModals.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const modal = e.target.closest('.modal-overlay');
-                    hideModal(modal);
+                    e.target.closest('.fixed').classList.add('hidden');
                 });
             });
         });
