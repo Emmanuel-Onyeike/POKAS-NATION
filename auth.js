@@ -1,4 +1,4 @@
-// Replace with your actual Supabase project URL and anon public key from Step 1
+// Replace with your actual Supabase project URL and anon public key
 const SUPABASE_URL = 'https://bhqnwueocaobybbrinwf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJocW53dWVvY2FvYnliYnJpbndmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5ODA3MDAsImV4cCI6MjA3MzU1NjcwMH0.LQ9U5eblqrA4wCGXk1v3PHCmb1NPE7kdGJHeT1CmEhI';
 
@@ -25,7 +25,6 @@ const handleRegister = async (event) => {
 
     registerMessage.classList.add('hidden');
 
-    // Password validation: Check if passwords match
     if (password !== confirmPassword) {
         registerMessage.textContent = 'Error: Passwords do not match!';
         registerMessage.classList.remove('hidden');
@@ -33,7 +32,6 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Step 1: Register the user with Supabase Authentication
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -46,11 +44,10 @@ const handleRegister = async (event) => {
         return;
     }
 
-    // Step 2: Insert the additional profile data into the 'profiles' table
     const userId = authData.user.id;
     const { error: profileError } = await supabase
         .from('profiles')
-        .insert([{ 
+        .insert([{
             id: userId,
             full_name: fullName,
             username: username,
@@ -95,12 +92,53 @@ const handleLogin = async (event) => {
         loginMessage.textContent = 'Login successful! Redirecting...';
         loginMessage.classList.remove('hidden');
         loginMessage.classList.add('text-green-500');
-        // Redirect to your dashboard or main page
         window.location.href = 'dashboard.html';
     }
 };
 
-// Add event listeners to the forms
+// Function to handle logout
+const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error('Error logging out:', error.message);
+    } else {
+        // Clear any local storage data and redirect to the login page
+        localStorage.removeItem("profilePicture");
+        window.location.href = 'login.html';
+    }
+};
+
+// Function to fetch and display user profile information
+const fetchUserProfile = async () => {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+        // User not logged in, handle accordingly
+        // For example, redirect to the login page
+        console.log('User not logged in. Redirecting...');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // The email is directly in the user object
+    document.getElementById('profile-details-email').textContent = user.email || 'Not set';
+
+    // Fetch the rest of the profile data from the 'profiles' table
+    const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('username') // Select only the username
+        .eq('id', user.id)
+        .single();
+
+    if (profileError) {
+        console.error('Error fetching profile data:', profileError.message);
+        document.getElementById('profile-details-username').textContent = 'Error loading';
+    } else {
+        document.getElementById('profile-details-username').textContent = profileData.username || 'Not set';
+    }
+};
+
+// Add event listeners to the forms and other elements
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
@@ -110,5 +148,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegister);
+    }
+
+    // Check if the page has a profile modal
+    const profileModal = document.getElementById('profile-details-modal');
+    if (profileModal) {
+        fetchUserProfile();
+
+        // Add event listener for the close button
+        const closeBtn = document.getElementById('close-profile-details-modal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                profileModal.classList.add('hidden');
+            });
+        }
+    }
+
+    // Add event listener for a logout button (assuming you'll add one with id="logout-btn")
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
     }
 });
