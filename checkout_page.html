@@ -14,6 +14,10 @@
             border-bottom: 2px solid #ef4444;
             color: #ffffff;
         }
+        .form-radio:checked {
+            border-color: #ef4444;
+            background-color: #ef4444;
+        }
     </style>
 </head>
 <body class="text-white font-sans antialiased">
@@ -64,8 +68,81 @@
     <main class="pt-8 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section id="delivery-content" class="tab-content">
             <h2 class="text-2xl sm:text-3xl font-bold mb-6">Delivery Information</h2>
+
+            <div id="address-details" class="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Address Details</h3>
+                    <div>
+                        <button id="save-address-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors mr-2">
+                            Save
+                        </button>
+                        <button id="change-address-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors hidden">
+                            Change/Edit
+                        </button>
+                    </div>
+                </div>
+
+                <div id="address-form-fields" class="space-y-4">
+                    <div>
+                        <label for="country" class="block text-gray-400 mb-1">Country</label>
+                        <input type="text" id="country" placeholder="e.g., Nigeria" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                    </div>
+                    <div>
+                        <label for="state" class="block text-gray-400 mb-1">State</label>
+                        <select id="state" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                            <option value="">Select your state...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="city" class="block text-gray-400 mb-1">City</label>
+                        <input type="text" id="city" placeholder="e.g., Port Harcourt" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                    </div>
+                    <div>
+                        <label for="street" class="block text-gray-400 mb-1">Home Address</label>
+                        <input type="text" id="street" placeholder="e.g., 123 Pokas Street" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-xl font-semibold mb-4">Delivery Method</h3>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="delivery-method" value="door-delivery" class="form-radio text-red-500 h-5 w-5">
+                        <span class="text-lg">Door Delivery</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="radio" name="delivery-method" value="pickup-station" class="form-radio text-red-500 h-5 w-5">
+                        <span class="text-lg">Pickup Station</span>
+                    </label>
+                    <label class="flex items-center space-x-3">
+                        <input type="radio" name="delivery-method" value="coming-soon" disabled class="form-radio text-gray-500 h-5 w-5">
+                        <span class="text-lg text-gray-500">Coming Soon</span>
+                    </label>
+                </div>
+                <div id="pickup-location-field" class="mt-4 hidden">
+                    <label for="pickup-location" class="block text-gray-400 mb-1">Enter Pickup Station</label>
+                    <input type="text" id="pickup-location" placeholder="e.g., Abuja Central Post Office" class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                </div>
+            </div>
+
             <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-                <p>Please enter your delivery address and contact details here.</p>
+                <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+                <div id="shipping-details" class="space-y-4">
+                    <p id="empty-cart-message" class="text-center text-gray-400 hidden">Your cart is empty.</p>
+                </div>
+                <div class="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
+                    <span class="text-lg font-bold">Subtotal:</span>
+                    <span id="shipping-total" class="text-xl font-bold text-green-400">$0.00</span>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between gap-4 mt-6">
+                    <a href="dashboard.html" class="flex-1 w-full text-center bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition-colors">
+                        Add More to Cart
+                    </a>
+                    <button id="continue-btn" class="flex-1 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-colors">
+                        Continue to Payment
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -89,17 +166,176 @@
             const tabs = document.querySelectorAll('.tab-button');
             const contents = document.querySelectorAll('.tab-content');
             
+            // --- Cart Data Retrieval ---
+            let cart = [];
+            try {
+                const storedCart = localStorage.getItem('cartItems');
+                if (storedCart) {
+                    cart = JSON.parse(storedCart);
+                }
+            } catch (e) {
+                console.error("Failed to retrieve cart from local storage:", e);
+                // Clear localStorage if data is corrupted
+                localStorage.removeItem('cartItems');
+            }
+
+            // --- Tab Switching Logic ---
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    
                     contents.forEach(content => content.classList.add('hidden'));
-                    
                     const targetId = tab.id.replace('-tab', '-content');
                     document.getElementById(targetId).classList.remove('hidden');
                 });
             });
+
+            // --- Address Details Logic ---
+            const countryInput = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+            const saveAddressBtn = document.getElementById('save-address-btn');
+            const changeAddressBtn = document.getElementById('change-address-btn');
+            const addressFormFields = document.getElementById('address-form-fields');
+            const cityInput = document.getElementById('city');
+            const streetInput = document.getElementById('street');
+
+            const nigerianStates = [
+                "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River", "Delta",
+                "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi",
+                "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto",
+                "Taraba", "Yobe", "Zamfara"
+            ];
+
+            const populateStates = () => {
+                stateSelect.innerHTML = '<option value="">Select your state...</option>';
+                nigerianStates.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            };
+
+            countryInput.addEventListener('input', (e) => {
+                if (e.target.value.toLowerCase() === 'nigeria') {
+                    populateStates();
+                    stateSelect.disabled = false;
+                } else {
+                    stateSelect.innerHTML = '<option value="">Select your state...</option>';
+                    stateSelect.disabled = true;
+                }
+            });
+
+            saveAddressBtn.addEventListener('click', () => {
+                const inputs = addressFormFields.querySelectorAll('input, select');
+                let allFilled = true;
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        allFilled = false;
+                    }
+                });
+
+                if (allFilled) {
+                    inputs.forEach(input => input.disabled = true);
+                    saveAddressBtn.classList.add('hidden');
+                    changeAddressBtn.classList.remove('hidden');
+                    alert('Address details saved!');
+                } else {
+                    alert('Please fill in all address details.');
+                }
+            });
+
+            changeAddressBtn.addEventListener('click', () => {
+                const inputs = addressFormFields.querySelectorAll('input, select');
+                inputs.forEach(input => input.disabled = false);
+                saveAddressBtn.classList.remove('hidden');
+                changeAddressBtn.classList.add('hidden');
+            });
+
+            // --- Delivery Method Logic ---
+            const deliveryMethodRadios = document.querySelectorAll('input[name="delivery-method"]');
+            const pickupLocationField = document.getElementById('pickup-location-field');
+
+            deliveryMethodRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'pickup-station') {
+                        pickupLocationField.classList.remove('hidden');
+                    } else {
+                        pickupLocationField.classList.add('hidden');
+                    }
+                });
+            });
+
+            // --- Shipping Details and Cart Display Logic ---
+            const shippingDetailsContainer = document.getElementById('shipping-details');
+            const shippingTotalDisplay = document.getElementById('shipping-total');
+            const continueBtn = document.getElementById('continue-btn');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+
+            const updateShippingDetails = () => {
+                shippingDetailsContainer.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    emptyCartMessage.classList.remove('hidden');
+                    continueBtn.disabled = true;
+                    continueBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    emptyCartMessage.classList.add('hidden');
+                    continueBtn.disabled = false;
+                    continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+
+                cart.forEach(item => {
+                    const itemTotal = parseFloat(item.price) * item.quantity;
+                    total += itemTotal;
+
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('flex', 'flex-col', 'sm:flex-row', 'items-center', 'justify-between', 'p-4', 'bg-gray-700', 'rounded-lg', 'shadow-md', 'relative');
+                    productElement.innerHTML = `
+                        <div class="flex items-center space-x-4 mb-4 sm:mb-0 w-full sm:w-auto">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md border border-gray-600">
+                            <div class="flex flex-col">
+                                <span class="text-base sm:text-lg font-semibold">${item.name}</span>
+                                <span class="text-sm text-gray-400">Qty: ${item.quantity} | Size: ${item.size}</span>
+                                <span class="text-sm font-bold text-green-400">$${itemTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <button class="remove-from-shipping text-xl text-red-500 hover:text-red-400 transition-colors" data-id="${item.id}" aria-label="Remove item">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    `;
+                    shippingDetailsContainer.appendChild(productElement);
+                });
+
+                shippingTotalDisplay.textContent = `$${total.toFixed(2)}`;
+            };
+
+            // Event listener for removing items from shipping details
+            shippingDetailsContainer.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.remove-from-shipping');
+                if (removeBtn) {
+                    const itemId = parseInt(removeBtn.dataset.id);
+                    cart = cart.filter(item => item.id !== itemId);
+                    updateShippingDetails();
+                }
+            });
+
+            // --- Continue Button Logic ---
+            continueBtn.addEventListener('click', () => {
+                const activeTab = document.querySelector('.tab-button.active');
+                const paymentTab = document.getElementById('payment-tab');
+                if (activeTab.id === 'delivery-tab') {
+                    if (cart.length === 0) {
+                        alert("Your cart is empty. Please add items before continuing.");
+                        return;
+                    }
+                    paymentTab.click();
+                }
+            });
+
+            // Initial calls
+            updateShippingDetails();
         });
     </script>
 </body>
