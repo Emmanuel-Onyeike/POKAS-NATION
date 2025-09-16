@@ -6,6 +6,7 @@
     <title>Pokas Nation - Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="/WhatsApp Image 2025-08-21 at 00.21.37.jpeg" type="image/x-icon" />
+    <!-- Ensure the favicon image exists in the root directory -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-black flex items-center justify-center min-h-screen">
@@ -18,7 +19,14 @@
                 <label for="full-name" class="block text-gray-300 mb-1">Full Name</label>
                 <div class="flex items-center bg-neutral-800 rounded-lg px-3">
                     <i class="fa fa-id-card text-red-800 mr-2"></i>
-                    <input type="text" id="full-name" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter your full name" required>
+                    <input 
+                        type="text" 
+                        id="full-name" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter your full name" 
+                        required 
+                        aria-describedby="register-message"
+                    >
                 </div>
             </div>
 
@@ -26,54 +34,141 @@
                 <label for="register-email" class="block text-gray-300 mb-1">Email</label>
                 <div class="flex items-center bg-neutral-800 rounded-lg px-3">
                     <i class="fa fa-envelope text-red-800 mr-2"></i>
-                    <input type="email" id="register-email" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter your email" required>
+                    <input 
+                        type="email" 
+                        id="register-email" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter your email" 
+                        required 
+                        aria-describedby="register-message"
+                    >
                 </div>
             </div>
 
             <div>
-                <label for="register-username" class="block text-gray-300 mb-1">Username</label>
+                <label for="register-username" class="block text-gray-300 mb-1">Username (optional)</label>
                 <div class="flex items-center bg-neutral-800 rounded-lg px-3">
                     <i class="fa fa-user text-red-800 mr-2"></i>
-                    <input type="text" id="register-username" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Choose a username" required>
+                    <input 
+                        type="text" 
+                        id="register-username" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Choose a username" 
+                        aria-describedby="register-message"
+                    >
                 </div>
             </div>
 
             <div>
-                <label for="phone-number" class="block text-gray-300 mb-1">Phone Number</label>
+                <label for="phone-number" class="block text-gray-300 mb-1">Phone Number (optional)</label>
                 <div class="flex items-center bg-neutral-800 rounded-lg px-3">
                     <i class="fa fa-phone text-red-800 mr-2"></i>
-                    <input type="tel" id="phone-number" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter your phone number">
+                    <input 
+                        type="tel" 
+                        id="phone-number" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter your phone number"
+                        aria-describedby="register-message"
+                    >
                 </div>
             </div>
 
             <div>
                 <label for="register-password" class="block text-gray-300 mb-1">Password</label>
-                <div class="flex items-center bg-neutral-800 rounded-lg px-3">
+                <div class="flex items-center bg-neutral-800 rounded-lg px-3 relative">
                     <i class="fa fa-lock text-red-800 mr-2"></i>
-                    <input type="password" id="register-password" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Enter password" required>
+                    <input 
+                        type="password" 
+                        id="register-password" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Enter password" 
+                        required 
+                        aria-describedby="register-message"
+                    >
+                    <button 
+                        type="button" 
+                        id="toggle-register-password" 
+                        class="absolute right-3 text-gray-400 hover:text-white" 
+                        aria-label="Toggle password visibility"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
 
             <div>
                 <label for="confirm-password" class="block text-gray-300 mb-1">Confirm Password</label>
-                <div class="flex items-center bg-neutral-800 rounded-lg px-3">
+                <div class="flex items-center bg-neutral-800 rounded-lg px-3 relative">
                     <i class="fa fa-lock text-red-800 mr-2"></i>
-                    <input type="password" id="confirm-password" class="w-full bg-transparent text-white py-2 focus:outline-none" placeholder="Confirm password" required>
+                    <input 
+                        type="password" 
+                        id="confirm-password" 
+                        class="w-full bg-transparent text-white py-2 focus:outline-none" 
+                        placeholder="Confirm password" 
+                        required 
+                        aria-describedby="register-message"
+                    >
+                    <button 
+                        type="button" 
+                        id="toggle-confirm-password" 
+                        class="absolute right-3 text-gray-400 hover:text-white" 
+                        aria-label="Toggle confirm password visibility"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
 
             <div id="register-message" class="text-center text-sm font-semibold mt-4 hidden"></div>
 
-            <button type="submit" id="register-btn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition text-center">
-                Register
+            <button 
+                type="submit" 
+                id="register-btn" 
+                class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition text-center block disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span id="register-btn-text">Register</span>
+                <span id="register-btn-loading" class="hidden">
+                    <i class="fas fa-spinner fa-spin"></i> Registering...
+                </span>
             </button>
         </form>
 
-        <p class="text-gray-400 text-center mt-6">Already have an account? 
+        <p class="text-gray-400 text-center mt-6">
+            Already have an account? 
             <a href="login.html" class="text-red-500 hover:underline">Login</a>
         </p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
+    <script>
+        // Password visibility toggles
+        document.getElementById('toggle-register-password')?.addEventListener('click', () => {
+            const passwordInput = document.getElementById('register-password');
+            const toggleIcon = document.getElementById('toggle-register-password').querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+
+        document.getElementById('toggle-confirm-password')?.addEventListener('click', () => {
+            const passwordInput = document.getElementById('confirm-password');
+            const toggleIcon = document.getElementById('toggle-confirm-password').querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 </body>
 </html>
