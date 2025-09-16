@@ -385,8 +385,7 @@
         });
     });
 </script>
-
-          <section id="summary-content" class="tab-content">
+ <section id="summary-content" class="tab-content">
         <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Order Summary</h2>
         <div class="space-y-6">
 
@@ -586,6 +585,7 @@
             const minimizedTrackingIcon = document.getElementById('minimized-tracking-icon');
             const customerCareBtns = document.querySelectorAll('.customer-care-btn');
             const closeModals = document.querySelectorAll('.close-modal');
+            const bellSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // Replace with your bell sound file
 
             function generateOrderNumber() {
                 const prefix = "pokas-";
@@ -611,11 +611,20 @@
                     successModal.classList.remove('hidden');
 
                     setTimeout(() => {
-                        successModal.classList.add('hidden');
-                        whatsappModal.classList.remove('hidden');
+                        window.location.href = "dashboard.html"; // Redirect to dashboard.html
                     }, 3000); // 3 seconds
                 }, 5000); // 5 seconds
             });
+
+            // This part of the code would be on dashboard.html
+            // I'll simulate the modals opening on page load
+            if (window.location.pathname.endsWith('dashboard.html')) {
+                // If coming from the summary page, you might use a query parameter or localStorage to trigger this
+                // For demonstration, I'll just show it on page load
+                
+                // Show WhatsApp modal
+                whatsappModal.classList.remove('hidden');
+            }
 
             closeWhatsappBtn.addEventListener('click', () => {
                 whatsappModal.classList.add('hidden');
@@ -623,7 +632,6 @@
                 updateTrackingProgress();
             });
 
-            let trackingInterval;
             function updateTrackingProgress() {
                 const stages = ['ordered', 'packing', 'on-the-road', 'nearest-station', 'received'];
                 const stageNames = {
@@ -633,10 +641,15 @@
                     'nearest-station': 'At Nearest Station',
                     'received': 'Delivered'
                 };
-                const steps = document.querySelectorAll('.tracking-step');
-
+                const stageDurations = {
+                    'ordered': 20000, // 20 seconds
+                    'packing': 20000, // 20 seconds
+                    'on-the-road': 20000, // 20 seconds
+                    'nearest-station': 1800000 // 30 minutes in milliseconds
+                };
                 let currentStepIndex = 0;
-                trackingInterval = setInterval(() => {
+                
+                const moveNextStage = () => {
                     if (currentStepIndex < stages.length) {
                         const stage = stages[currentStepIndex];
                         const step = document.querySelector(`[data-stage="${stage}"]`);
@@ -650,20 +663,19 @@
                         const percent = (currentStepIndex / (stages.length - 1)) * 100;
                         document.getElementById('tracking-line').style.width = `${percent}%`;
 
-                        if (currentStepIndex === stages.length - 1) {
-                            clearInterval(trackingInterval);
-                            setTimeout(() => {
-                                steps.forEach(s => {
-                                    s.querySelector('i').classList.remove('text-red-500');
-                                    s.querySelector('i').classList.add('text-green-500');
-                                });
-                                document.getElementById('current-tracking-stage').textContent = 'Received';
-                            }, 2000); // Wait 2 seconds before final color change for effect
-                        } else {
-                            currentStepIndex++;
+                        if (stage === 'received') {
+                            bellSound.play();
+                            step.querySelector('i').classList.remove('text-red-500');
+                            step.querySelector('i').classList.add('text-green-500');
+                            return; // End the process
                         }
+
+                        currentStepIndex++;
+                        setTimeout(moveNextStage, stageDurations[stage]);
                     }
-                }, 1000); // 1-second interval for demonstration
+                };
+
+                moveNextStage();
             }
 
             minimizeTrackingBtn.addEventListener('click', () => {
@@ -690,7 +702,7 @@
             });
         });
     </script>
-       <style>
+      <Style>
         .modal {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
