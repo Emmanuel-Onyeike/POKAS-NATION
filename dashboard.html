@@ -206,31 +206,97 @@
     </div>
 </div>
 
-<div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 transition-opacity duration-300">
-    <div class="bg-gray-900 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4 md:mx-auto transform scale-95 transition-transform duration-300 ease-out">
-        <button id="close-settings-modal" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors text-2xl" aria-label="Close settings modal">
-            <i class="fas fa-times"></i>
-        </button>
-        <h2 class="text-3xl font-extrabold text-white mb-6 text-center">Settings</h2>
-        <div class="space-y-4">
-            <div class="flex items-center justify-between">
-                <span>Email Notifications</span>
-                <label class="switch">
-                    <input type="checkbox" checked>
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <div class="flex items-center justify-between">
-                <span>Dark Mode</span>
-                <label class="switch">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            <a href="#" class="block text-red-500 hover:underline">Change Password</a>
+<div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-300">
+  <div class="relative bg-gray-900 text-white p-8 rounded-2xl shadow-2xl w-full max-w-lg mx-4 md:mx-auto transform scale-95 transition-transform duration-300 ease-out">
+    
+    <!-- Close button -->
+    <button id="close-settings-modal" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors text-2xl" aria-label="Close settings modal">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Title -->
+    <h2 class="text-3xl font-extrabold text-white mb-6 text-center">Settings</h2>
+
+    <div class="space-y-6">
+      <!-- Account Settings -->
+      <div>
+        <h3 class="text-lg font-semibold text-red-500 mb-2">Account</h3>
+        <div class="space-y-3">
+          <button class="w-full flex items-center justify-between bg-neutral-800 px-4 py-2 rounded-lg hover:bg-neutral-700">
+            <span>Change Username</span>
+            <i class="fas fa-user-edit text-gray-400"></i>
+          </button>
+          <button class="w-full flex items-center justify-between bg-neutral-800 px-4 py-2 rounded-lg hover:bg-neutral-700">
+            <span>Change Email</span>
+            <i class="fas fa-envelope text-gray-400"></i>
+          </button>
+          <button class="w-full flex items-center justify-between bg-neutral-800 px-4 py-2 rounded-lg hover:bg-neutral-700">
+            <span>Change Password</span>
+            <i class="fas fa-lock text-gray-400"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Security Settings -->
+      <div>
+        <h3 class="text-lg font-semibold text-red-500 mb-2">Security</h3>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span>Two-Step Verification</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-red-600 transition"></div>
+              <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full peer-checked:translate-x-5 transition"></div>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Login Alerts</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-red-600 transition"></div>
+              <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full peer-checked:translate-x-5 transition"></div>
+            </label>
+          </div>
+          <button class="w-full flex items-center justify-between bg-neutral-800 px-4 py-2 rounded-lg hover:bg-neutral-700">
+            <span>Manage Active Sessions</span>
+            <i class="fas fa-mobile-alt text-gray-400"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div>
+        <h3 class="text-lg font-semibold text-red-500 mb-2">Preferences</h3>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span>Email Notifications</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-red-600 transition"></div>
+              <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full peer-checked:translate-x-5 transition"></div>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Dark Mode</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-red-600 transition"></div>
+              <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full peer-checked:translate-x-5 transition"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="pt-4 border-t border-gray-700">
+        <button class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition">
+          Delete Account
+        </button>
+      </div>
     </div>
+  </div>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
