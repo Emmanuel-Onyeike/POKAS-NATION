@@ -3,52 +3,992 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Splash Screen</title>
+  <title>Pokas Nation - Dashboard</title>
+  <!-- Load Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Link to Font Awesome for Icons -->
   <link rel="icon" href="/WhatsApp Image 2025-08-21 at 00.21.37.jpeg" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    /* Custom Scrollbar for better aesthetics */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-    .fade-in-scale {
-      animation: fadeInScale 2s ease-out forwards;
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
     }
-    .fade-out {
-      transition: opacity 1s ease-in-out;
-      opacity: 0;
+    ::-webkit-scrollbar-thumb {
+      background: #4a5568;
+      border-radius: 4px;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
     }
-    .spin {
-      animation: spin 2.5s linear infinite;
+
+    /* Modal slide-in animations */
+    .modal-slide-right {
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+    .modal-slide-right.active {
+      transform: translateX(0);
+    }
+    .modal-slide-left {
+      transform: translateX(-100%);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .modal-slide-left.active {
+      transform: translateX(0);
+    }
+
+    /* Marquee animation for the top banner */
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      animation: marquee 25s linear infinite;
+    }
+
+    /* Glowing effect for call-to-action buttons */
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 30px #ef4444;
+      }
+      50% {
+        box-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444, 0 0 15px #ef4444;
+      }
+    }
+    .animate-pulse-glow {
+      animation: pulse-glow 2s infinite;
+    }
+    
+    /* Wiggle animation for icons on hover */
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+    .group:hover .animate-wiggle {
+      animation: wiggle 0.5s ease-in-out;
+    }
+
+    /* Custom classes for horizontal scroll */
+    .snap-x {
+      scroll-snap-type: x mandatory;
+    }
+    .snap-center {
+      scroll-snap-align: center;
+    }
+    @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.animate-bounce-in {
+    animation: bounceIn 0.5s ease-out forwards;
+}
   </style>
 </head>
-<body class="bg-black flex items-center justify-center min-h-screen">
+<body class="bg-[#0a0a0a] text-white font-sans antialiased">
 
-  <div id="splash" class="flex flex-col items-center fade-in-scale">
-    <!-- Your Logo -->
-    <img src="WhatsApp Image 2025-08-21 at 00.21.37.jpeg" alt="Logo" class="w-44 h-44 object-contain mb-8">
-
-    <!-- Sewing Machine Spinner (SVG) -->
-   
-
-    <p class="text-sm font-medium text-gray-500 mt-6">Powered by TechNxxt</p>
+  <!-- Mobile Menu Modal -->
+  <div id="mobile-menu-modal" class="modal-slide-left fixed inset-y-0 left-0 w-full max-w-sm z-50 bg-black bg-opacity-90 flex flex-col justify-center items-center p-8">
+    <button id="close-mobile-menu-btn" class="absolute top-6 right-6 text-2xl text-gray-400 hover:text-white transition-colors">
+      <i class="fas fa-times"></i>
+    </button>
+    <nav class="space-y-8 text-center text-3xl font-bold">
+      <a href="dashboard.html" class="block hover:text-red-500 transition-colors duration-200">Home</a>
+      <a href="arrivals.html" class="block hover:text-red-500 transition-colors duration-200">New Arrivals</a>
+      <a href="trending.html" class="block hover:text-red-500 transition-colors duration-200">Trending</a>
+      <a href="exclusive.html" class="block hover:text-red-500 transition-colors duration-200">Exclusive Deals</a>
+      <a href="categories.html" class="block hover:text-red-500 transition-colors duration-200">Categories</a>
+           <a href="checkout_page.html" class="block hover:text-red-500 transition-colors duration-200">Categories</a>
+    </nav>
   </div>
 
-  <script>
-    const splash = document.getElementById("splash");
-    window.onload = function() {
-      setTimeout(() => {
-        splash.classList.add("fade-out");
-        setTimeout(() => {
-          window.location.href = "welcome.html";
-        }, 1000); // wait for fade-out before redirect
-      }, 5000);
+  <!-- Profile Modal -->
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="modal-slide-right fixed inset-y-0 right-0 w-full max-w-md z-50 bg-gray-900 shadow-2xl p-8 md:p-10 rounded-l-2xl">
+    <!-- Close Button -->
+    <button id="close-cart-btn" class="absolute top-6 left-6 w-10 h-10 flex items-center justify-center rounded-full border border-white text-gray-300 hover:bg-white/10 hover:text-white transition">
+      <i class="fas fa-times text-lg"></i>
+    </button>
+  
+    <!-- Cart Header -->
+    <h2 class="text-3xl font-extrabold text-white mb-8 flex items-center gap-4 tracking-tight pl-12">
+      <i class="fas fa-shopping-cart text-red-400 text-2xl"></i>
+      <span>Your Cart</span>
+    </h2>
+  
+    <!-- Empty Cart State -->
+    <div id="empty-cart" class="flex flex-col items-center justify-center text-center mt-20 space-y-3">
+      <i class="fas fa-shopping-bag text-7xl text-gray-500 opacity-70"></i>
+      <h3 class="text-xl font-semibold text-gray-200">Your cart is empty</h3>
+      <p class="text-gray-400 text-sm max-w-xs">Browse our collection and add items you love to get started.</p>
+    </div>
+  
+    <!-- Cart Items Container -->
+    <div id="cart-items" class="hidden flex flex-col gap-5 max-h-[22rem] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+      <!-- Dynamic cart items will go here -->
+    </div>
+  
+    <!-- Checkout Section -->
+    <div id="checkout-section" class="hidden mt-8 border-t border-gray-700 pt-6">
+      <div class="flex justify-between text-white font-semibold text-xl mb-6">
+        <span>Total:</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+    <a href="welcome.html" class="block">
+  <button class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-lg">
+    Checkout Securely
+  </button>
+</a>
+    </div>
+  </div>
+  
+
+  <!-- Header -->
+  <header class="bg-[#101010] shadow-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="relative w-12 h-12 rounded-full overflow-hidden mr-2 md:w-16 md:h-16">
+          <img src="WhatsApp Image 2025-08-21 at 00.21.37.jpeg" alt="Brand Logo" class="w-full h-full object-cover">
+        </div>
+        <h1 class="text-2xl font-bold tracking-wide">Pokas <span class="text-red-500">Nation</span></h1>
+      </div>
+      
+      <div class="hidden md:flex flex-1 mx-8">
+        <div class="relative w-full">
+          <input type="text" placeholder="Search for products..."
+            class="w-full px-4 pl-12 py-3 rounded-full bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300">
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4 md:space-x-6">
+        <button id="open-mobile-menu-btn" class="md:hidden">
+          <i class="fas fa-bars text-xl cursor-pointer hover:text-red-500 transition"></i>
+        </button>
+        <button id="open-cart-btn" class="relative group">
+          <i class="fas fa-shopping-cart text-xl hover:text-red-500 transition animate-wiggle"></i>
+        
+        </button>
+        <a href="#" class="relative hidden sm:block group">
+          <i class="fas fa-heart text-xl hover:text-red-500 transition animate-wiggle"></i>
+        </a>
+       
+      </div>
+    </div>
+  </header>
+  <!-- Desktop Navigation Bar -->
+  <nav class="hidden md:block bg-gray-900 border-t border-gray-800 py-3 shadow-sm z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center space-x-12 text-lg font-semibold">
+      <a href="dashboard.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-home"></i> Home
+      </a>
+      <a href="arrivals.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-store"></i> New Arrivals
+      </a>
+      <a href="trending.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-fire"></i> Trending
+      </a>
+      <a href="exclusive.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-star"></i> Exclusive
+      </a>
+      <a href="categories.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-th-list"></i> Categories
+      </a>
+       <a href="checkout_page.html" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+        <i class="fas fa-shopping-cart"></i> Check Out
+      </a>  
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+
+    <!-- Marquee -->
+    <section class="bg-gray-900 py-3 rounded-lg mb-8 overflow-hidden border-2 border-red-600">
+      <div class="whitespace-nowrap animate-marquee">
+        <p class="inline-block text-lg font-semibold tracking-wide px-12">
+          🔥 FREE SHIPPING on all orders over $50 | LIMITED TIME OFFER: Buy one, get one 50% off! 🔥
+        </p>
+      </div>
+    </section>
+
+    <!-- Hero Banner -->
+    <section class="relative bg-gradient-to-r from-red-600 to-red-400 rounded-2xl overflow-hidden mb-12 shadow-xl">
+      <div class="p-8 sm:p-12 md:p-16 flex flex-col justify-center items-center text-center">
+        <h2 class="text-3xl sm:text-5xl font-extrabold mb-2 tracking-tight drop-shadow-md">✨ New Arrivals!</h2>
+        <p class="text-base sm:text-lg max-w-xl mb-6 font-light drop-shadow">Discover the latest trends and upgrade your style with our exclusive new collection. Limited stock available.</p>
+        <a href="arrivals.html" class="inline-block bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-transform transform hover:scale-105 shadow-md">Shop Now</a>
+      </div>
+    </section>
+
+    <section id="new-arrivals" class="mb-12">
+      <div class="flex items-center justify-between mb-8">
+        <h3 class="text-3xl font-bold tracking-tight">✨ New Arrivals</h3>
+    
+      </div>
+    
+      <!-- Main container for products: horizontal scroll on mobile, grid on desktop -->
+      <div class="flex overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4 md:overflow-x-visible">
+    
+        <!-- Product Card 1 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 1.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#1</h4>
+            <p class="text-gray-400 font-medium">$45.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Midnight Shadow T-Shirt"
+              data-product-price="$45.00"
+              data-product-image="card 1.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 2 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 2.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#2</h4>
+            <p class="text-gray-400 font-medium">$75.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Urban Explorer Hoodie"
+              data-product-price="$75.00"
+              data-product-image="card 2.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 3 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 3.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#3</h4>
+            <p class="text-gray-400 font-medium">$60.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Classic Black Joggers"
+              data-product-price="$60.00"
+              data-product-image="card 3.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 4 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 4.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#4</h4>
+            <p class="text-gray-400 font-medium">$90.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Street-Style Windbreaker"
+              data-product-price="$90.00"
+              data-product-image="card 4.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 5 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 5.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#5</h4>
+            <p class="text-gray-400 font-medium">$80.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Oversized Cargo Pants"
+              data-product-price="$80.00"
+              data-product-image="card 5.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 6 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 6.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#6</h4>
+            <p class="text-gray-400 font-medium">$65.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Bold Graphic Crewneck"
+              data-product-price="$65.00"
+              data-product-image="card 6.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 7 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 7.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#7</h4>
+            <p class="text-gray-400 font-medium">$120.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="High-Top Canvas Sneakers"
+              data-product-price="$120.00"
+              data-product-image="card 7.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 8 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 8.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#8</h4>
+            <p class="text-gray-400 font-medium">$95.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Slim-Fit Biker Jeans"
+              data-product-price="$95.00"
+              data-product-image="card 8.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 9 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 9.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#9</h4>
+            <p class="text-gray-400 font-medium">$150.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Minimalist Puffer Jacket"
+              data-product-price="$150.00"
+              data-product-image="card 9.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 10 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card10.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#10</h4>
+            <p class="text-gray-400 font-medium">$50.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Geometric Pattern Shirt"
+              data-product-price="$50.00"
+              data-product-image="card10.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 11 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 11.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#11</h4>
+            <p class="text-gray-400 font-medium">$65.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Essential Tech Joggers"
+              data-product-price="$65.00"
+              data-product-image="card 11.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 12 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 12.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#12</h4>
+            <p class="text-gray-400 font-medium">$40.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Abstract Art Tee"
+              data-product-price="$40.00"
+              data-product-image="card 12.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 13 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 13.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#13</h4>
+            <p class="text-gray-400 font-medium">$130.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Futuristic Bomber Jacket"
+              data-product-price="$130.00"
+              data-product-image="card 13.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 14 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 14.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#14</h4>
+            <p class="text-gray-400 font-medium">$55.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Distressed Denim Shorts"
+              data-product-price="$55.00"
+              data-product-image="card 14.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 15 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 15.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#15</h4>
+            <p class="text-gray-400 font-medium">$110.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Monochrome Sneakers"
+              data-product-price="$110.00"
+              data-product-image="card 15.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 16 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 16.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#16</h4>
+            <p class="text-gray-400 font-medium">$85.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Sportswear Track Jacket"
+              data-product-price="$85.00"
+              data-product-image="card 16.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        
+        <!-- Product Card 17 -->
+        <div class="flex-shrink-0 w-64 snap-center mr-6 md:w-auto md:mr-0 relative bg-[#1a1a1a] rounded-xl p-4 shadow-lg flex flex-col items-center text-center group overflow-hidden">
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <img src="card 17.jpeg" alt="Product Image" class="w-full h-auto rounded-lg mb-4 transition-transform group-hover:scale-105">
+            <h4 class="text-lg font-semibold text-gray-100">#17</h4>
+            <p class="text-gray-400 font-medium">$25.00</p>
+            <button
+              class="add-to-cart-btn mt-4 w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all duration-300 opacity-0 group-hover:opacity-100 transform -translate-y-2 group-hover:translate-y-0"
+              data-product-name="Bold Statement Cap"
+              data-product-price="$25.00"
+              data-product-image="card 17.jpeg">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+    
+        <!-- Product Card 18 -->
+      
+      </div>
+    </section>
+    
+    <Product Modal (Hidden by <div id="product-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-75 flex items-center justify-center p-4">
+  <div class="relative bg-gray-900 rounded-xl w-full max-w-md md:max-w-lg p-6 md:p-8 text-center shadow-lg">
+
+    <!-- Close Button -->
+    <button id="close-product-modal-btn" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-white transition-colors">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Product Image -->
+    <img id="modal-product-image" src="" alt="Product Image" class="w-full h-auto rounded-lg mb-6 object-cover max-h-64 sm:max-h-72 md:max-h-80">
+
+    <!-- Product Name & Price -->
+    <h3 id="modal-product-name" class="text-2xl md:text-3xl font-bold text-white mb-2 leading-snug"></h3>
+    <p id="modal-product-price" class="text-xl md:text-2xl text-red-500 font-semibold mb-6"></p>
+
+    <!-- Quantity Selector -->
+    <div class="flex items-center justify-center space-x-6 mb-6">
+      <button id="decrease-quantity-btn" class="text-gray-400 hover:text-white transition-colors">
+        <i class="fas fa-minus-circle text-2xl md:text-3xl"></i>
+      </button>
+      <span id="quantity-display" class="font-semibold text-xl md:text-2xl text-white">1</span>
+      <button id="increase-quantity-btn" class="text-gray-400 hover:text-white transition-colors">
+        <i class="fas fa-plus-circle text-2xl md:text-3xl"></i>
+      </button>
+    </div>
+
+    <!-- Size Selector -->
+    <div class="mb-6">
+      <h4 class="text-base md:text-lg font-semibold text-gray-200 mb-3">Select Size</h4>
+      <div id="size-options" class="grid grid-cols-3 sm:grid-cols-5 gap-3 justify-center">
+        <button class="size-btn px-3 py-2 border border-gray-500 rounded-md text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition text-sm sm:text-base" data-size="S">S</button>
+        <button class="size-btn px-3 py-2 border border-gray-500 rounded-md text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition text-sm sm:text-base" data-size="M">M</button>
+        <button class="size-btn px-3 py-2 border border-gray-500 rounded-md text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition text-sm sm:text-base" data-size="L">L</button>
+        <button class="size-btn px-3 py-2 border border-gray-500 rounded-md text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition text-sm sm:text-base" data-size="XL">XL</button>
+        <button class="size-btn px-3 py-2 border border-gray-500 rounded-md text-white font-medium hover:bg-gray-700 focus:ring-2 focus:ring-red-500 transition text-sm sm:text-base" data-size="XXL">XXL</button>
+      </div>
+    </div>
+
+    <!-- Add to Cart Button -->
+    <button class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-transform transform hover:scale-105 shadow-md text-lg">
+      Add to Cart
+    </button>
+
+  </div>
+</div>
+
+
+    
+    <style>
+      /* Custom animation for the product modal */
+      @keyframes modal-fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes modal-scale-up {
+        from { transform: scale(0.9); }
+        to { transform: scale(1); }
+      }
+      #product-modal.show {
+        display: flex;
+        animation: modal-fade-in 0.3s ease-out forwards;
+      }
+      .modal-content-box {
+        animation: modal-scale-up 0.3s ease-out forwards;
+      }
+    </style>
+    
+    <script>
+      // Add-to-cart modal logic
+      const productModal = document.getElementById('product-modal');
+      const closeProductModalBtn = document.getElementById('close-product-modal-btn');
+      const modalProductName = document.getElementById('modal-product-name');
+      const modalProductPrice = document.getElementById('modal-product-price');
+      const modalProductImage = document.getElementById('modal-product-image');
+      const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    
+      // New variables for quantity and size selectors
+      const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
+      const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
+      const quantityDisplay = document.getElementById('quantity-display');
+      const sizeOptions = document.getElementById('size-options');
+      const sizeButtons = document.querySelectorAll('.size-btn');
+    
+      // Function to show the modal with product details
+      function showProductModal(productName, productPrice, productImage) {
+        modalProductName.textContent = productName;
+        modalProductPrice.textContent = productPrice;
+        modalProductImage.src = productImage;
+        // Reset quantity and size selection every time the modal opens
+        quantityDisplay.textContent = '1';
+        sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600'));
+        productModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prevents scrolling
+      }
+    
+      // Function to hide the modal
+      function hideProductModal() {
+        productModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    
+      // Function to handle quantity increase
+      increaseQuantityBtn.addEventListener('click', () => {
+        let currentQuantity = parseInt(quantityDisplay.textContent);
+        quantityDisplay.textContent = currentQuantity + 1;
+      });
+    
+      // Function to handle quantity decrease
+      decreaseQuantityBtn.addEventListener('click', () => {
+        let currentQuantity = parseInt(quantityDisplay.textContent);
+        if (currentQuantity > 1) {
+          quantityDisplay.textContent = currentQuantity - 1;
+        }
+      });
+    
+      // Event listener for size selection
+      sizeOptions.addEventListener('click', (event) => {
+        if (event.target.classList.contains('size-btn')) {
+          // Remove 'selected' style from all buttons
+          sizeButtons.forEach(btn => btn.classList.remove('bg-red-600', 'border-red-600'));
+          // Add 'selected' style to the clicked button
+          event.target.classList.add('bg-red-600', 'border-red-600');
+        }
+      });
+    
+      // Event listeners for Add to Cart buttons on the product cards
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const name = event.target.dataset.productName;
+          const price = event.target.dataset.productPrice;
+          const image = event.target.dataset.productImage;
+          showProductModal(name, price, image);
+        });
+      });
+    
+      // Event listener for closing the modal
+      closeProductModalBtn.addEventListener('click', hideProductModal);
+    
+      // Close the modal if the user clicks outside of the content
+      productModal.addEventListener('click', (event) => {
+        if (event.target === productModal) {
+          hideProductModal();
+        }
+      });
+    </script>
+    
+      
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#101010] text-gray-400 pt-16">
+  <!-- Gradient Divider -->
+  <div class="h-1 bg-gradient-to-r from-red-500 to-black-800 w-full mb-12"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+          <!-- Brand & Mission Column -->
+          <div class="flex flex-col items-center md:items-start">
+              <h1 class="text-3xl font-bold tracking-wide mb-2 text-white">Pokas <span class="text-red-500">Nation</span></h1>
+              <p class="text-sm">Innovating streetwear, one design at a time. We are committed to quality and empowering self-expression.</p>
+          </div>
+
+          <!-- Quick Links Column -->
+          <div>
+              <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+              <nav class="flex flex-col space-y-2">
+                  <a href="#" class="hover:text-white transition-colors">Shop All</a>
+                  <a href="#" class="hover:text-white transition-colors">New Arrivals</a>
+                  <a href="#" class="hover:text-white transition-colors">About Us</a>
+                  <a href="#" class="hover:text-white transition-colors">Contact</a>
+              </nav>
+          </div>
+
+          <!-- Social & Info Column -->
+          <div class="flex flex-col items-center md:items-start">
+              <h4 class="text-lg font-semibold text-white mb-4">Follow Us</h4>
+              <div class="flex space-x-4 mb-6">
+                  <a href="#" class="text-2xl hover:text-red-500 transition-colors transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="text-2xl hover:text-red-500 transition-colors transform hover:scale-110"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="text-2xl hover:text-red-500 transition-colors transform hover:scale-110"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="text-2xl hover:text-red-500 transition-colors transform hover:scale-110"><i class="fab fa-youtube"></i></a>
+              </div>
+              <p class="text-sm text-center md:text-left mt-auto">&copy; 2025 Pokas Nation. All Rights Reserved.</p>
+              <p class="text-sm mt-1 text-gray-500 text-center md:text-left">Powered by Tech Nxxt company. Innovation 2025</p>
+          </div>
+      </div>
+  </div>
+</footer>
+
+
+<script>
+  // Modal Logic
+  const openMobileMenuBtn = document.getElementById('open-mobile-menu-btn');
+  const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
+  const mobileMenuModal = document.getElementById('mobile-menu-modal');
+
+  const openProfileBtn = document.getElementById('open-profile-btn');
+  const closeProfileBtn = document.getElementById('close-profile-btn');
+  const profileModal = document.getElementById('profile-modal');
+
+  const openCartBtn = document.getElementById('open-cart-btn');
+  const closeCartBtn = document.getElementById('close-cart-btn');
+  const cartModal = document.getElementById('cart-modal');
+
+  function toggleModal(modal, openBtn, closeBtn) {
+    if (modal && openBtn && closeBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+      modal.addEventListener('click', (e) => {
+        if (e.target.id === modal.id) {
+          modal.classList.remove('active');
+        }
+      });
+    }
+  }
+
+  toggleModal(mobileMenuModal, openMobileMenuBtn, closeMobileMenuBtn);
+  toggleModal(profileModal, openProfileBtn, closeProfileBtn);
+  toggleModal(cartModal, openCartBtn, closeCartBtn);
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // === Modal and Cart Elements ===
+    const productModal = document.getElementById('product-modal');
+    const closeProductModalBtn = document.getElementById('close-product-modal-btn');
+    const modalImage = document.getElementById('modal-product-image');
+    const modalName = document.getElementById('modal-product-name');
+    const modalPrice = document.getElementById('modal-product-price');
+    const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
+    const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
+    const quantityDisplay = document.getElementById('quantity-display');
+    const sizeOptions = document.getElementById('size-options');
+    const modalAddToCartBtn = productModal.querySelector('.w-full.py-3');
+    const allProductCards = document.querySelectorAll('.flex-shrink-0');
+
+    // === Success Message and Cart Display Elements ===
+    const cartModal = document.getElementById('cart-modal');
+    const openCartBtn = document.getElementById('open-cart-btn');
+    const closeCartBtn = document.getElementById('close-cart-btn');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const emptyCartMessage = document.getElementById('empty-cart');
+    const checkoutSection = document.getElementById('checkout-section');
+    const cartTotalDisplay = document.getElementById('cart-total');
+    const cartItemCountSpan = document.getElementById('cart-item-count');
+
+    // === Success Message Pop-up ===
+    const successModal = document.createElement('div');
+    successModal.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50', 'hidden');
+    successModal.innerHTML = `
+        <div class="bg-[#1a1a1a] p-8 rounded-xl shadow-2xl text-center relative max-w-sm w-11/12 md:w-full mx-auto border-2 border-green-500 transform scale-95 transition-transform duration-300 ease-out animate-fade-in-up">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors duration-200 text-2xl" aria-label="Close success message">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="text-green-500 mb-4 text-6xl animate-bounce-in">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-extrabold text-white mb-3 tracking-wide">Success!</h3>
+            <p class="text-lg text-gray-300 mb-6">Your item has been added to the cart.</p>
+        </div>
+    `;
+    document.body.appendChild(successModal);
+    const closeSuccessModalBtn = successModal.querySelector('button');
+
+    // === Global State ===
+    let cart = [];
+    let currentProductData = {};
+    let currentQuantity = 1;
+    let currentSize = '';
+
+    // === Functions ===
+
+    const showSuccessMessage = () => {
+        successModal.classList.remove('hidden');
+        successModal.querySelector('div').style.transform = 'scale(1)';
+        setTimeout(hideSuccessMessage, 5000);
     };
-  </script>
-  <script src="tailwind.js"></script>
+
+    const hideSuccessMessage = () => {
+        successModal.querySelector('div').style.transform = 'scale(0.95)';
+        setTimeout(() => successModal.classList.add('hidden'), 300);
+    };
+
+    const updateCart = () => {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            emptyCartMessage.classList.remove('hidden');
+            checkoutSection.classList.add('hidden');
+            cartItemsContainer.classList.add('hidden');
+        } else {
+            emptyCartMessage.classList.add('hidden');
+            checkoutSection.classList.remove('hidden');
+            cartItemsContainer.classList.remove('hidden');
+
+            // Use vertical stacked layout instead of grid
+            const listContainer = document.createElement('div');
+            listContainer.classList.add('flex', 'flex-col', 'space-y-4', 'mt-4', 'w-full');
+
+            cart.forEach(item => {
+                const itemPrice = parseFloat(item.price.replace('$', '')) * item.quantity;
+                total += itemPrice;
+
+                const itemElement = document.createElement('div');
+                itemElement.classList.add(
+                    'relative',
+                    'bg-gray-800',
+                    'p-4',
+                    'rounded-xl',
+                    'shadow-lg',
+                    'flex',
+                    'items-center',
+                    'justify-between',
+                    'w-full'
+                );
+                itemElement.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-md border border-gray-700">
+                        <div class="flex flex-col">
+                            <h5 class="text-base sm:text-lg text-white font-semibold">${item.name}</h5>
+                            <p class="text-red-400 font-bold text-sm">Qty: ${item.quantity} | Size: ${item.size}</p>
+                            <p class="text-gray-400 font-medium text-sm">Price: $${parseFloat(item.price.replace('$', '')).toFixed(2)}</p>
+                            <p class="text-gray-200 font-bold text-base">Total: $${itemPrice.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <button class="remove-from-cart text-gray-400 hover:text-red-500 transition-colors text-xl ml-4" aria-label="Remove item">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                `;
+
+                itemElement.querySelector('.remove-from-cart').addEventListener('click', () => {
+                    cart = cart.filter(product => !(product.name === item.name && product.size === item.size));
+                    updateCart();
+                });
+
+                listContainer.appendChild(itemElement);
+            });
+
+            cartItemsContainer.appendChild(listContainer);
+        }
+
+        cartTotalDisplay.textContent = `$${total.toFixed(2)}`;
+        if (cartItemCountSpan) {
+            const totalItemsInCart = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartItemCountSpan.textContent = totalItemsInCart;
+            if (totalItemsInCart > 0) {
+                cartItemCountSpan.classList.remove('hidden');
+            } else {
+                cartItemCountSpan.classList.add('hidden');
+            }
+        }
+    };
+
+    // === Event Listeners ===
+    allProductCards.forEach(card => {
+        const cardAddBtn = card.querySelector('.add-to-cart-btn');
+        if (cardAddBtn) {
+            cardAddBtn.addEventListener('click', (e) => {
+                const productName = e.currentTarget.dataset.productName;
+                const productPrice = e.currentTarget.dataset.productPrice;
+                const productImage = e.currentTarget.dataset.productImage;
+
+                currentProductData = {
+                    name: productName,
+                    price: productPrice,
+                    image: productImage
+                };
+                modalImage.src = currentProductData.image;
+                modalName.textContent = currentProductData.name;
+                modalPrice.textContent = currentProductData.price;
+                currentQuantity = 1;
+                quantityDisplay.textContent = currentQuantity;
+                currentSize = '';
+
+                sizeOptions.querySelectorAll('.size-btn').forEach(btn => {
+                    btn.classList.remove('bg-red-600', 'border-red-600');
+                    btn.classList.add('bg-transparent', 'border-gray-500');
+                });
+
+                productModal.classList.remove('hidden');
+            });
+        }
+    });
+
+    closeProductModalBtn.addEventListener('click', () => {
+        productModal.classList.add('hidden');
+    });
+
+    increaseQuantityBtn.addEventListener('click', () => {
+        currentQuantity++;
+        quantityDisplay.textContent = currentQuantity;
+    });
+
+    decreaseQuantityBtn.addEventListener('click', () => {
+        if (currentQuantity > 1) {
+            currentQuantity--;
+            quantityDisplay.textContent = currentQuantity;
+        }
+    });
+
+    sizeOptions.addEventListener('click', (e) => {
+        if (e.target.classList.contains('size-btn')) {
+            sizeOptions.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('bg-red-600', 'border-red-600');
+                btn.classList.add('bg-transparent', 'border-gray-500');
+            });
+            e.target.classList.add('bg-red-600', 'border-red-600');
+            e.target.classList.remove('bg-transparent', 'border-gray-500');
+            currentSize = e.target.dataset.size;
+        }
+    });
+
+    modalAddToCartBtn.addEventListener('click', () => {
+        if (!currentSize) {
+            alert('Please select a size before adding to cart.');
+            return;
+        }
+
+        const existingItem = cart.find(item => item.name === currentProductData.name && item.size === currentSize);
+        if (existingItem) {
+            existingItem.quantity += currentQuantity;
+        } else {
+            cart.push({
+                ...currentProductData,
+                quantity: currentQuantity,
+                size: currentSize
+            });
+        }
+
+        updateCart();
+        showSuccessMessage();
+        productModal.classList.add('hidden');
+    });
+
+    closeSuccessModalBtn.addEventListener('click', hideSuccessMessage);
+
+    openCartBtn.addEventListener('click', () => {
+        cartModal.classList.remove('modal-slide-right');
+    });
+    closeCartBtn.addEventListener('click', () => {
+        cartModal.classList.add('modal-slide-right');
+    });
+
+    updateCart();
+});
+</script>
+
+<script src="tailwind.js"></script>
 </body>
 </html>
